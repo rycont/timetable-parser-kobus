@@ -12,13 +12,13 @@ export async function getRoutePlans(
 ) {
     const rawResult = await fetchKobusPlans(departureTerminal, arrivalTerminal)
 
-    const timetableByDate = rawResult.map((item) =>
-        rawPlanListResponseScheme.parse(JSON.parse(item)),
-    )
+    const timetableByDate = rawResult
+        .map((item) => rawPlanListResponseScheme.parse(JSON.parse(item)))
+        .filter((item) => item.length > 0)
 
     const mergedPlans = normalizedPlanScheme
         .array()
-        .parse(mergePlans(timetableByDate.flat()))
+        .parse(mergePlans(timetableByDate.flat(), timetableByDate.length))
 
     return mergedPlans
 }

@@ -5,7 +5,10 @@ import {
 } from '../types/plan-raw.ts'
 import { determineVariant } from './determine-variant.ts'
 
-export function mergePlans(plans: PlannedOperation[]) {
+export function mergePlans(
+    plans: PlannedOperation[],
+    parsingWindowSize: number,
+) {
     const plansByPlanKey = Object.groupBy(plans, (plan) =>
         flattenDepartureTime(plan),
     )
@@ -44,9 +47,11 @@ export function mergePlans(plans: PlannedOperation[]) {
             departureTerminalId,
             departureTime,
             isTemporaryRoute,
-            pattern: determineVariant(operatedDates, 14),
+            pattern: determineVariant(operatedDates, parsingWindowSize),
             fare: mergeFares(plans.map((plan) => plan.fare)),
         }
+
+        console.log(normalizedPlan.pattern)
 
         normalizedPlans.set(planKey, normalizedPlanScheme.parse(normalizedPlan))
     }

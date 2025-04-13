@@ -16,6 +16,13 @@ export async function fetchKobusPlans(
         fileName,
         targetUri: 'https://www.kobus.co.kr/oprninf/alcninqr/readAlcnSrch.ajax',
         action: async (page) => {
+            page.on('dialog', async (dialog) => {
+                await new Promise((resolve) =>
+                    setTimeout(resolve, 1000 + Math.random() * 2000),
+                )
+                await dialog.dismiss()
+            })
+
             // Set departure and arrival terminals
             await page.evaluate(
                 `
