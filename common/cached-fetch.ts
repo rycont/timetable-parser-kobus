@@ -39,9 +39,8 @@ async function cachedCrawl({
         const responsePromise = new Promise<void>((resolve) => {
             console.log('Waiting for response...')
             page.on('response', async (response) => {
-                console.log(response.url())
                 if (response.url().includes(targetUri)) {
-                    console.log('Catched!')
+                    console.log('Catched!', response.url())
                     const content = await response.text()
                     responseContents.push(content)
                     resolve()

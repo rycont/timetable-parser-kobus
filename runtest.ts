@@ -1,5 +1,5 @@
 import { closeBrowser } from './common/cached-fetch.ts'
-import { getRoutePlans } from './kobus/get-route-plans.ts'
+import { getRoutePlans } from './kobus/get-route-plans/index.ts'
 import { getTerminals } from './kobus/get-terminals.ts'
 
 const { routes, terminals } = await getTerminals()
