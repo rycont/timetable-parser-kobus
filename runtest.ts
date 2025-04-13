@@ -5,14 +5,14 @@ import { getTerminals } from './kobus/get-terminals.ts'
 const { routes, terminals } = await getTerminals()
 
 console.log(
-    terminals.get(routes[1].departureTerminalId)!,
-    terminals.get(routes[1].arrivalTerminalId)!,
+    terminals.get(routes[705].departureTerminalId)!,
+    terminals.get(routes[705].arrivalTerminalId)!,
 )
 
 console.log(
     await getRoutePlans(
-        terminals.get(routes[0].departureTerminalId)!,
-        terminals.get(routes[0].arrivalTerminalId)!,
+        terminals.get(routes[705].departureTerminalId)!,
+        terminals.get(routes[705].arrivalTerminalId)!,
     ),
 )
 

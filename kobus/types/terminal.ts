@@ -1,19 +1,20 @@
 import { z } from 'zod'
+import { numericString } from '../../common/scheme.ts'
 
 export const terminalScheme = z.object({
-    id: z.number(),
+    id: numericString,
     name: z.string(),
-    area: z.number(),
+    area: numericString,
 })
 
 export const routeScheme = z.object({
-    departureTerminalId: z.number(),
-    arrivalTerminalId: z.number(),
+    departureTerminalId: numericString,
+    arrivalTerminalId: numericString,
     durationInMinutes: z.number(),
 })
 
 export const transferRouteScheme = routeScheme.extend({
-    transferTerminalId: z.number(),
+    transferTerminalId: numericString,
 })
 
 export type Terminal = z.infer<typeof terminalScheme>

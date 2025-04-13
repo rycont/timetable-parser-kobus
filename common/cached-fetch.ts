@@ -21,6 +21,7 @@ async function cachedCrawl({
 }) {
     try {
         const cache = await Deno.readTextFile(`${CACHE_DIR}/${fileName}`)
+        console.log('Cache found, using cached data...')
         return JSON.parse(cache) as string[]
     } catch (e) {
         if (e instanceof Deno.errors.NotFound) {
@@ -39,8 +40,9 @@ async function cachedCrawl({
         const responsePromise = new Promise<void>((resolve) => {
             console.log('Waiting for response...')
             page.on('response', async (response) => {
+                console.log(response.url())
                 if (response.url().includes(targetUri)) {
-                    console.log('Catched!', response.url())
+                    console.log('Catched!')
                     const content = await response.text()
                     responseContents.push(content)
                     resolve()

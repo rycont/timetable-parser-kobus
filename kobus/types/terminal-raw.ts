@@ -1,30 +1,30 @@
 import { z } from 'zod'
 
-import { stringToNumber, ynEnum } from '../../common/scheme.ts'
+import { numericString, stringToNumber, ynEnum } from '../../common/scheme.ts'
 
 export const rawDirectRoutesScheme = z.object({
     homeTickYn: ynEnum,
     prmmDcYn: ynEnum,
     takeTime: stringToNumber,
-    deprArea: stringToNumber,
+    deprArea: numericString,
     deprNm: z.string(),
-    deprCd: stringToNumber,
-    arvlArea: stringToNumber,
+    deprCd: numericString,
+    arvlArea: numericString,
     arvlNm: z.string(),
-    arvlCd: stringToNumber,
+    arvlCd: numericString,
 })
 
 export const rawTransferRoutesScheme = z.object({
-    arvlArea: stringToNumber,
-    tfrCd: stringToNumber,
+    arvlArea: numericString,
+    tfrCd: numericString,
     arvlNm: z.string(),
     arvlNmAll: z.string(),
     deprNm: z.string(),
-    tfrArea: stringToNumber,
-    arvlCd: stringToNumber,
-    deprCd: stringToNumber,
+    tfrArea: numericString,
+    arvlCd: numericString,
     tfrNm: z.string(),
-    deprArea: stringToNumber,
+    deprArea: numericString,
+    deprCd: numericString,
 })
 
 export const rawRouteResponseScheme = z.object({

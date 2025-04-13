@@ -69,21 +69,21 @@ export type PlannedOperation = z.infer<typeof plannedOperationScheme>
 export const rawPlanScheme = z.object({
     RMN_SATS_NUM: stringToNumber,
     ADLT_FEE: stringToNumber,
-    ALCN_ARVL_TRML_NO: stringToNumber,
+    ALCN_ARVL_TRML_NO: numericString,
     ALCN_CHC: z.string(),
-    ARVL_TRML_NO: stringToNumber,
+    ARVL_TRML_NO: numericString,
     CACM_CSS: z.string(),
     CHLD_FEE: stringToNumber,
     TEMP_ROT_YN: z.string().nullable(),
     BUS_CLS_NM: z.string(),
-    ALCN_DEPR_TRML_NO: stringToNumber,
+    ALCN_DEPR_TRML_NO: numericString,
     ALCN_CHC_DIV: z.string(),
     TOT_SATS_NUM: stringToNumber,
     ALCN_DEPR_TIME: numericString,
     ALCN_CHC_CSS: z.string(),
     TEEN_FEE: stringToNumber,
     DEPR_TIME: stringToNumber,
-    TIME_CHC: stringToNumber,
+    TIME_CHC: z.unknown(),
     DRTM_MOD_PSB_YN: z.string().nullable(),
     BUS_CLS_CD: stringToNumber,
     CTY_PRMM_DC_YN: z.string().nullable(),
@@ -97,9 +97,9 @@ export const rawPlanScheme = z.object({
         return `${year}-${month}-${day}`
     }),
     BUS_CLS_CD_CSS: z.string(),
-    CACM_CD: stringToNumber,
+    CACM_CD: numericString,
     CACM_MN: z.string(),
-    DEPR_TRML_NO: stringToNumber,
+    DEPR_TRML_NO: numericString,
 })
 
 export const rawPlanListResponseScheme = z

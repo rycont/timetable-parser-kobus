@@ -11,7 +11,7 @@ export async function getTerminals() {
 
     const rawRoutes = rawRouteResponseScheme.parse(JSON.parse(routesRawString))
 
-    const terminalsMap: Map<number, Terminal> = new Map()
+    const terminalsMap: Map<string, Terminal> = new Map()
     const routesMap: Set<Route> = new Set()
 
     for (const rawRoute of rawRoutes.rotInfList) {
