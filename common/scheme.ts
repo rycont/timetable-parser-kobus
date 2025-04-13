@@ -14,8 +14,8 @@ export const ynEnum = z.enum(['Y', 'N'])
 // }
 
 export const timeScheme = z.object({
-    hour: z.number().int().min(0).max(23),
-    minute: z.number().int().min(0).max(59),
+    hour: z.number().int().min(0).max(24),
+    minute: z.number().int().min(0).max(60),
 })
 
 export const yyyymmddScheme = z
