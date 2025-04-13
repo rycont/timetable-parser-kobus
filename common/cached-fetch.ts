@@ -62,13 +62,6 @@ async function cachedCrawl({
 
         await responsePromise
 
-        // // page.on
-
-        // // // Dump all the links from the page.
-        // // await page.goto(entryPoint)
-
-        // // const content = await page.content()
-
         await page.close()
         await context.close()
 
@@ -87,6 +80,7 @@ async function cachedCrawl({
 
 export default cachedCrawl
 
-export function closeBrowser() {
-    return browser.close()
+export async function closeBrowser() {
+    await browser.close()
+    console.log('Browser closed')
 }

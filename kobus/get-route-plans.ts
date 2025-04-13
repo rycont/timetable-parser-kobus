@@ -1,7 +1,11 @@
-import { z } from 'zod'
-
 import cachedCrawl from '../common/cached-fetch.ts'
-import { Plan, rawPlanListResponseScheme } from './types/plan-raw.ts'
+import {
+    NormalizedPlan,
+    normalizedPlanScheme,
+    OperatingPattern,
+    PlannedOperation,
+    rawPlanListResponseScheme,
+} from './types/plan-raw.ts'
 import { Terminal } from './types/terminal.ts'
 
 export async function getRoutePlans(
@@ -59,64 +63,32 @@ document.querySelector("#alcnSrchBtn").children[0].click()`,
         rawPlanListResponseScheme.parse(JSON.parse(item)),
     )
 
-    const planKeysByDate = new Map(
-        timetableByDate.map((timetable) => [
-            timetable[0].date,
-            timetable.map(createPlanKey),
-        ]),
-    )
+    const mergedPlans = normalizedPlanScheme
+        .array()
+        .parse(mergePlans(timetableByDate.flat()))
 
-    const isVariationExists = hasVariation([...planKeysByDate.values()])
-
-    if (isVariationExists) {
-        console.log(getVariants(planKeysByDate))
-    } else {
-        console.log('No variation')
-    }
+    return mergedPlans
 }
 
-function createPlanKey(plan: Plan) {
+function createPlanKey(plan: PlannedOperation) {
     return `${plan.departureTime.hour}-${plan.departureTime.minute}`
 }
 
-function hasVariation(planKeysByDate: string[][]) {
-    const flattenedFirstPlanKeys = planKeysByDate[0].join('/')
-
-    return !planKeysByDate.slice(1).every((planKeys) => {
-        const flattenedPlanKeys = planKeys.join('/')
-        return flattenedFirstPlanKeys === flattenedPlanKeys
-    })
-}
-
-function getVariants(planKeysByDateMap: Map<string, string[]>) {
-    const allPlanKeys = [...planKeysByDateMap.values()].flat()
-    const uniquePlanKeys = [...new Set(allPlanKeys)]
-
-    return uniquePlanKeys.map((key) => [
-        key,
-        determineVariant(key, planKeysByDateMap),
-    ])
-}
-
 function determineVariant(
-    planKey: string,
-    planKeysByDateMap: Map<string, string[]>,
-) {
-    const operatedDates = [...planKeysByDateMap.keys()]
-        .filter((date) => planKeysByDateMap.get(date)?.includes(planKey))
-        .map((yyyymmdd) => {
-            const temporalDate = Temporal.PlainDate.from(yyyymmdd)
-            return temporalDate
-        })
+    operatedDatesString: string[],
+    parsingWindowSize: number,
+): OperatingPattern {
+    const operatedDates = operatedDatesString.map((yyyymmdd) => {
+        const temporalDate = Temporal.PlainDate.from(yyyymmdd)
+        return temporalDate
+    })
 
-    const isAllDayOperation = operatedDates.length === planKeysByDateMap.size
+    const isAllDayOperation = operatedDates.length === parsingWindowSize
 
     if (isAllDayOperation) {
-        return [
-            {
-                type: 'all-day',
-            },
-        ]
+        return {
+            type: 'everyday',
+        }
     }
 
     const operatingDatesInYear = operatedDates.map((date) => date.dayOfYear)
@@ -128,11 +100,9 @@ function determineVariant(
     const isEvenOddOperation = dateIntervals.every((interval) => interval === 2)
 
     if (isEvenOddOperation) {
-        return [
-            {
-                type: 'even-odd',
-            },
-        ]
+        return {
+            type: 'even-odd',
+        }
     }
 
     const operatingDaysInWeek = operatedDates.map((date) => date.dayOfWeek)
@@ -144,7 +114,99 @@ function determineVariant(
         operatingCountsByDayMap.set(day, count + 1)
     }
 
-    console.log(operatingCountsByDayMap)
+    const isSpecificDayOperation = [...operatingCountsByDayMap.values()].every(
+        (count) => count === 2,
+    )
 
-    throw 'Fucked'
+    if (isSpecificDayOperation) {
+        return {
+            type: 'specific-day',
+            days: [...operatingCountsByDayMap.keys()],
+        }
+    }
+
+    const daysByOperatingTypes = {
+        ...Object.groupBy(
+            [...operatingCountsByDayMap.keys()],
+            (day) => operatingCountsByDayMap.get(day)!,
+        ),
+    }
+
+    const fixedDays = daysByOperatingTypes['2']!
+    const irregularDays = daysByOperatingTypes['1']!
+
+    return {
+        type: 'irregular',
+        fixedDays,
+        irregularDays,
+    }
+}
+
+function mergePlans(plans: PlannedOperation[]) {
+    const plansByPlanKey = Object.groupBy(plans, (plan) => createPlanKey(plan))
+    const normalizedPlans = new Map<string, NormalizedPlan>()
+
+    const mergingKeys = [
+        'operator',
+        'busClass',
+        'seatsAmount',
+        'durationInMinutes',
+    ] as const
+
+    for (const planKey in plansByPlanKey) {
+        let normalizedPlan: Partial<NormalizedPlan> = {}
+
+        const plans = plansByPlanKey[planKey]!
+
+        for (const mergingKey of mergingKeys) {
+            const values = plans.map((plan) => plan[mergingKey])
+            //@ts-ignore
+            normalizedPlan[mergingKey] = mergeValues(values)
+        }
+
+        const {
+            arrivalTerminalId,
+            departureTerminalId,
+            departureTime,
+            isTemporaryRoute,
+        } = plans[0]
+
+        const operatedDates = plans.map((plan) => plan.date)
+
+        normalizedPlan = {
+            ...normalizedPlan,
+            arrivalTerminalId,
+            departureTerminalId,
+            departureTime,
+            isTemporaryRoute,
+            pattern: determineVariant(operatedDates, 14),
+            fare: mergeFares(plans.map((plan) => plan.fare)),
+        }
+
+        normalizedPlans.set(planKey, normalizedPlanScheme.parse(normalizedPlan))
+    }
+
+    return [...normalizedPlans.values()]
+}
+
+function mergeFares(fares: PlannedOperation['fare'][]): {
+    [key in keyof PlannedOperation['fare']]: number[]
+} {
+    const fareKeys = Object.keys(fares[0])
+
+    const mergedFare: ReturnType<typeof mergeFares> = {} as any
+
+    for (const _fareKey of fareKeys) {
+        const fareKey = _fareKey as keyof PlannedOperation['fare']
+
+        const fareValues = fares.map((fare) => fare[fareKey])
+        mergedFare[fareKey] = mergeValues(fareValues)
+    }
+
+    return mergedFare
+}
+
+function mergeValues<T>(values: T[]): T[] {
+    const uniqueValues = [...new Set(values)]
+    return uniqueValues
 }
