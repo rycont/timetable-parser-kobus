@@ -51,6 +51,8 @@ export function mergePlans(
             fare: mergeFares(plans.map((plan) => plan.fare)),
         }
 
+        console.log(normalizedPlan.pattern, planKey)
+
         normalizedPlans.set(planKey, normalizedPlanScheme.parse(normalizedPlan))
     }
 

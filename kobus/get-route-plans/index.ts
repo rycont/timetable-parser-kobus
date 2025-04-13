@@ -20,5 +20,10 @@ export async function getRoutePlans(
         .array()
         .parse(mergePlans(timetableByDate.flat(), timetableByDate.length))
 
+    await Deno.writeTextFile(
+        `./output/timetable/${departureTerminal.id}-${arrivalTerminal.id}.json`,
+        JSON.stringify(mergedPlans, null, 2),
+    )
+
     return mergedPlans
 }

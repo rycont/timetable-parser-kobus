@@ -4,7 +4,6 @@ export function determineVariant(
     operatedDatesString: string[],
     parsingWindowSize: number,
 ): OperatingPattern {
-    console.log(operatedDatesString)
     const operatedDates = operatedDatesString.map((yyyymmdd) => {
         const temporalDate = Temporal.PlainDate.from(yyyymmdd)
         return temporalDate
@@ -59,8 +58,8 @@ export function determineVariant(
         ),
     }
 
-    const fixedDays = daysByOperatingTypes['2']!
-    const irregularDays = daysByOperatingTypes['1']!
+    const fixedDays = daysByOperatingTypes['2'] || []
+    const irregularDays = daysByOperatingTypes['1'] || []
 
     return {
         type: 'irregular',

@@ -50,7 +50,7 @@ document.querySelector("#alcnSrchBtn").children[0].click()`,
                 )
 
                 // Wait for the results to load
-                const delay = 2000 + Math.floor(Math.random() * 3000)
+                const delay = 1000 + Math.floor(Math.random() * 2000)
                 await new Promise((resolve) => setTimeout(resolve, delay))
                 date = date.add({ days: 1 })
             }

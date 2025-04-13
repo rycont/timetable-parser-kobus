@@ -36,11 +36,20 @@ export const operatingPatternScheme = z.union([
         type: z.literal('specific-day'),
         days: z.array(z.number().max(7).min(1)),
     }),
-    z.object({
-        type: z.literal('irregular'),
-        fixedDays: z.array(z.number().max(7).min(1)),
-        irregularDays: z.array(z.number().max(7).min(1)),
-    }),
+    z
+        .object({
+            type: z.literal('irregular'),
+            fixedDays: z.array(z.number().max(7).min(1)),
+            irregularDays: z.array(z.number().max(7).min(1)),
+        })
+        .refine(
+            (data) =>
+                data.fixedDays?.length !== 0 ||
+                data.irregularDays?.length !== 0,
+            {
+                message: 'fixedDays or irregularDays must be provided',
+            },
+        ),
 ])
 
 export type OperatingPattern = z.infer<typeof operatingPatternScheme>

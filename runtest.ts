@@ -1,8 +1,11 @@
 import { closeBrowser } from './common/cached-fetch.ts'
 import { getRoutePlans } from './kobus/get-route-plans/index.ts'
 import { getTerminals } from './kobus/get-terminals.ts'
+import { OperatingPattern } from './kobus/types/plan-raw.ts'
 
 const { routes, terminals } = await getTerminals()
+
+const daysInKorean = '월화수목금토일'
 
 async function getPlansFromRoute(route: {
     departureTerminalId: string
@@ -19,30 +22,52 @@ async function getPlansFromRoute(route: {
         arrivalTerminal?.name,
     )
 
+    const plans = await getRoutePlans(
+        terminals.get(route.departureTerminalId)!,
+        terminals.get(route.arrivalTerminalId)!,
+    )
+
     console.table(
-        (
-            await getRoutePlans(
-                terminals.get(route.departureTerminalId)!,
-                terminals.get(route.arrivalTerminalId)!,
-            )
-        ).map((plan) => ({
+        plans.map((plan) => ({
             '출발 시간':
                 plan.departureTime.hour.toString().padStart(2, '0') +
                 ':' +
                 plan.departureTime.minute.toString().padStart(2, '0'),
-            운임: plan.fare.어른,
-            소요시간: plan.durationInMinutes,
-            등급: plan.busClass,
-            운행사: plan.operator,
+            운행요일: formatOperatingPattern(plan.pattern),
         })),
     )
 }
 
-await getPlansFromRoute(routes[5])
+for (const route of routes) {
+    await getPlansFromRoute(route)
+    await new Promise((resolve) => setTimeout(resolve, 100))
+}
 
-// for (const route of routes) {
-//     await getPlansFromRoute(route)
-//     await new Promise((resolve) => setTimeout(resolve, 3000))
-// }
+// await getPlansFromRoute(routes[27])
 
 await closeBrowser()
+
+function formatOperatingPattern(pattern: OperatingPattern) {
+    if (pattern.type === 'even-odd') {
+        return '격일'
+    }
+
+    if (pattern.type === 'everyday') {
+        return '매일'
+    }
+
+    if (pattern.type === 'specific-day') {
+        return formatDays(pattern.days)
+    }
+
+    if (pattern.type === 'irregular') {
+        const regular = `${formatDays(pattern.fixedDays)}`
+        const irregular = `(${formatDays(pattern.irregularDays)} 일부)`
+
+        return `${regular} ${irregular}`
+    }
+}
+
+function formatDays(days: number[]) {
+    return days.map((day) => daysInKorean[day - 1]).join('')
+}

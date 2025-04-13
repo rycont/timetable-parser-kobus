@@ -42,6 +42,16 @@ export async function getTerminals() {
         }
     }
 
+    await Deno.writeTextFile(
+        './output/terminals.json',
+        JSON.stringify(terminalsMap.values(), null, 2),
+    )
+
+    await Deno.writeTextFile(
+        './output/connections.json',
+        JSON.stringify(Array.from(routesMap), null, 2),
+    )
+
     return {
         terminals: terminalsMap,
         routes: Array.from(routesMap),
