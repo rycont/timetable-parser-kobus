@@ -4,6 +4,7 @@ export function determineVariant(
     operatedDatesString: string[],
     parsingWindowSize: number,
 ): OperatingPattern {
+    console.log(operatedDatesString)
     const operatedDates = operatedDatesString.map((yyyymmdd) => {
         const temporalDate = Temporal.PlainDate.from(yyyymmdd)
         return temporalDate

@@ -39,7 +39,7 @@ export function mergePlans(
             isTemporaryRoute,
         } = plans[0]
 
-        const operatedDates = plans.map((plan) => plan.date)
+        const operatedDates = [...new Set(plans.map((plan) => plan.date))]
 
         normalizedPlan = {
             ...normalizedPlan,
@@ -50,8 +50,6 @@ export function mergePlans(
             pattern: determineVariant(operatedDates, parsingWindowSize),
             fare: mergeFares(plans.map((plan) => plan.fare)),
         }
-
-        console.log(normalizedPlan.pattern)
 
         normalizedPlans.set(planKey, normalizedPlanScheme.parse(normalizedPlan))
     }

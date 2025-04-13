@@ -82,7 +82,7 @@ export const rawPlanScheme = z.object({
     ALCN_DEPR_TIME: numericString,
     ALCN_CHC_CSS: z.string(),
     TEEN_FEE: stringToNumber,
-    DEPR_TIME: stringToNumber,
+    DEPR_TIME: numericString,
     TIME_CHC: z.unknown(),
     DRTM_MOD_PSB_YN: z.string().nullable(),
     BUS_CLS_CD: stringToNumber,
@@ -122,14 +122,14 @@ export const rawPlanListResponseScheme = z
         data.alcnAllList.map((item) =>
             plannedOperationScheme.parse({
                 departureTime: {
-                    hour: parseInt(item.ALCN_DEPR_TIME.slice(0, 2), 10),
-                    minute: parseInt(item.ALCN_DEPR_TIME.slice(2, 4), 10),
+                    hour: parseInt(item.DEPR_TIME.slice(0, 2), 10),
+                    minute: parseInt(item.DEPR_TIME.slice(2, 4), 10),
                 },
                 durationInMinutes: data.alcnCmnMap.TAKE_DRTM,
                 isTemporaryRoute: item.TEMP_ROT_YN === 'Y',
                 operator: item.CACM_MN,
-                arrivalTerminalId: item.ALCN_ARVL_TRML_NO,
-                departureTerminalId: item.ALCN_DEPR_TRML_NO,
+                arrivalTerminalId: item.ARVL_TRML_NO,
+                departureTerminalId: item.DEPR_TRML_NO,
                 busClass: item.BUS_CLS_NM,
                 seatsAmount: item.TOT_SATS_NUM,
                 date: item.DEPR_DT,

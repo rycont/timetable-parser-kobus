@@ -21,6 +21,7 @@ export async function fetchKobusPlans(
                     setTimeout(resolve, 1000 + Math.random() * 2000),
                 )
                 await dialog.dismiss()
+                console.log('Dialog dismissed')
             })
 
             // Set departure and arrival terminals
@@ -40,7 +41,7 @@ document.querySelector('#prmmDcYn').value = 'N'
 
             for (let i = 0; i < 14; i++) {
                 const yyyymmdd = date.toString().replace(/-/g, '')
-                console.log(yyyymmdd)
+                console.log(`${i + 1} / 14: ${yyyymmdd}`)
                 await page.evaluate(
                     `
 document.querySelector('#alcnSrchBtn .btn_confirm').classList.remove('ready')
