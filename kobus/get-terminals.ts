@@ -1,4 +1,4 @@
-import cachedCrawl from '../common/cached-fetch.ts'
+import { cachedCrawl } from '../common/cached-crawl.ts'
 import { rawRouteResponseScheme } from './types/terminal-raw.ts'
 import { Route, Terminal } from './types/terminal.ts'
 

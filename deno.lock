@@ -1,13 +1,12 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:@types/node@*": "22.12.0",
-    "npm:puppeteer-core@^24.6.0": "24.6.0_devtools-protocol@0.0.1425554",
+    "npm:puppeteer-core@^24.6.1": "24.6.1_devtools-protocol@0.0.1425554",
     "npm:zod@^3.24.2": "3.24.2"
   },
   "npm": {
-    "@puppeteer/browsers@2.9.0": {
-      "integrity": "sha512-8+xM+cFydYET4X/5/3yZMHs7sjS6c9I6H5I3xJdb6cinzxWUT/I2QVw4avxCQ8QDndwdHkG/FiSZIrCjAbaKvQ==",
+    "@puppeteer/browsers@2.10.0": {
+      "integrity": "sha512-HdHF4rny4JCvIcm7V1dpvpctIGqM3/Me255CB44vW7hDG1zYMmcBMjpNqZEDxdCfXGLkx5kP0+Jz5DUS+ukqtA==",
       "dependencies": [
         "debug",
         "extract-zip",
@@ -291,8 +290,8 @@
         "once"
       ]
     },
-    "puppeteer-core@24.6.0_devtools-protocol@0.0.1425554": {
-      "integrity": "sha512-Cukxysy12m0v350bhl/Gzof0XQYmtON9l2VvGp3D4BOQZVgyf+y5wIpcjDZQ/896Okoi95dKRGRV8E6a7SYAQQ==",
+    "puppeteer-core@24.6.1_devtools-protocol@0.0.1425554": {
+      "integrity": "sha512-sMCxsY+OPWO2fecBrhIeCeJbWWXJ6UaN997sTid6whY0YT9XM0RnxEwLeUibluIS5/fRmuxe1efjb5RMBsky7g==",
       "dependencies": [
         "@puppeteer/browsers",
         "chromium-bidi",
@@ -435,7 +434,7 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:puppeteer-core@^24.6.0",
+      "npm:puppeteer-core@^24.6.1",
       "npm:zod@^3.24.2"
     ]
   }

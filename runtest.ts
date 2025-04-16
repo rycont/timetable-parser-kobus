@@ -1,4 +1,4 @@
-import { closeBrowser } from './common/cached-fetch.ts'
+import { closeBrowser } from './common/cached-crawl.ts'
 import { getRoutePlans } from './kobus/get-route-plans/index.ts'
 import { getTerminals } from './kobus/get-terminals.ts'
 import { OperatingPattern } from './kobus/types/plan-raw.ts'

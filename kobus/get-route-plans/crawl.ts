@@ -1,11 +1,11 @@
-import cachedCrawl from '../../common/cached-fetch.ts'
+import { cachedCrawl } from '../../common/cached-crawl.ts'
 import { Terminal } from '../types/terminal.ts'
 
 export async function fetchKobusPlans(
     departureTerminal: Terminal,
     arrivalTerminal: Terminal,
 ): Promise<string[]> {
-    let date = Temporal.Now.plainDateISO().add({ days: 1 })
+    const date = new Date()
 
     const fileName = `kobus-route-plans-${departureTerminal.id}-${arrivalTerminal.id}.json`
 
@@ -50,7 +50,7 @@ document.querySelector("#alcnSrchBtn").children[0].click()`,
                 // Wait for the results to load
                 const delay = 1000 + Math.floor(Math.random() * 1000)
                 await new Promise((resolve) => setTimeout(resolve, delay))
-                date = date.add({ days: 1 })
+                date.setDate(date.getDate() + 1)
             }
         },
     })

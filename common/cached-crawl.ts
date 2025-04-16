@@ -8,7 +8,7 @@ const browser = await puppeteer.launch({
     args: ['--no-sandbox'],
 })
 
-async function cachedCrawl({
+export async function cachedCrawl({
     entryPoint,
     fileName,
     targetUri,
@@ -77,8 +77,6 @@ async function cachedCrawl({
         return responseContents
     }
 }
-
-export default cachedCrawl
 
 export async function closeBrowser() {
     await browser.close()
