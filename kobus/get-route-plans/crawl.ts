@@ -7,9 +7,7 @@ export async function fetchKobusPlans(
 ): Promise<string[]> {
     let date = Temporal.Now.plainDateISO().add({ days: 1 })
 
-    const fileName = `kobus-route-plans-${departureTerminal.id}-${
-        arrivalTerminal.id
-    }-${date.toString().replace(/-/g, '')}.json`
+    const fileName = `kobus-route-plans-${departureTerminal.id}-${arrivalTerminal.id}.json`
 
     const rawResult = await cachedCrawl({
         entryPoint: 'https://www.kobus.co.kr/oprninf/alcninqr/oprnAlcnPage.do',
