@@ -38,7 +38,7 @@ async function getPlansFromRoute(route: {
     )
 }
 
-for (const route of routes.slice(100)) {
+for (const route of routes) {
     await getPlansFromRoute(route)
     await new Promise((resolve) => setTimeout(resolve, 50))
 }

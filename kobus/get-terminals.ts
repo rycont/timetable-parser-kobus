@@ -44,7 +44,7 @@ export async function getTerminals() {
 
     await Deno.writeTextFile(
         './output/terminals.json',
-        JSON.stringify(terminalsMap.values(), null, 2),
+        JSON.stringify([...terminalsMap.values()], null, 2),
     )
 
     await Deno.writeTextFile(

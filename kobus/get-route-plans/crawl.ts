@@ -16,7 +16,7 @@ export async function fetchKobusPlans(
         action: async (page) => {
             page.on('dialog', async (dialog) => {
                 await new Promise((resolve) =>
-                    setTimeout(resolve, 1000 + Math.random() * 2000),
+                    setTimeout(resolve, 600 + Math.random() * 100),
                 )
                 await dialog.dismiss()
                 console.log('Dialog dismissed')
@@ -48,7 +48,7 @@ document.querySelector("#alcnSrchBtn").children[0].click()`,
                 )
 
                 // Wait for the results to load
-                const delay = 1000 + Math.floor(Math.random() * 2000)
+                const delay = 1000 + Math.floor(Math.random() * 1000)
                 await new Promise((resolve) => setTimeout(resolve, delay))
                 date = date.add({ days: 1 })
             }
