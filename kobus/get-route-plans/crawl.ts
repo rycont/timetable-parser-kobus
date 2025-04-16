@@ -6,6 +6,7 @@ export async function fetchKobusPlans(
     arrivalTerminal: Terminal,
 ): Promise<string[]> {
     const date = new Date()
+    date.setDate(date.getDate() + 1)
 
     const fileName = `kobus-route-plans-${departureTerminal.id}-${arrivalTerminal.id}.json`
 
@@ -38,7 +39,10 @@ document.querySelector('#prmmDcYn').value = 'N'
             )
 
             for (let i = 0; i < 14; i++) {
-                const yyyymmdd = date.toString().replace(/-/g, '')
+                const yyyymmdd = date
+                    .toISOString()
+                    .slice(0, 10)
+                    .replaceAll('-', '')
                 console.log(`${i + 1} / 14: ${yyyymmdd}`)
                 await page.evaluate(
                     `
