@@ -15,13 +15,6 @@ async function getPlansFromRoute(route: {
     const departureTerminal = terminals.get(route.departureTerminalId)
     const arrivalTerminal = terminals.get(route.arrivalTerminalId)
 
-    console.log(
-        "We're travelling from",
-        departureTerminal?.name,
-        'to',
-        arrivalTerminal?.name,
-    )
-
     const plans = await getRoutePlans(
         terminals.get(route.departureTerminalId)!,
         terminals.get(route.arrivalTerminalId)!,
@@ -38,9 +31,16 @@ async function getPlansFromRoute(route: {
     )
 }
 
+let index = 0
+
 for (const route of routes) {
+    console.log(
+        `(${index + 1}/${routes.length}) ${route.departureTerminalId} -> ${
+            route.arrivalTerminalId
+        }`,
+    )
     await getPlansFromRoute(route)
-    await new Promise((resolve) => setTimeout(resolve, 50))
+    index++
 }
 
 // await getPlansFromRoute(routes[27])
