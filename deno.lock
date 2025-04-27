@@ -1,8 +1,38 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@roka/git@~0.3.1": "0.3.1",
+    "jsr:@std/assert@^1.0.11": "1.0.13",
+    "jsr:@std/collections@^1.0.10": "1.0.11",
+    "jsr:@std/internal@^1.0.6": "1.0.6",
+    "jsr:@std/path@^1.0.8": "1.0.9",
     "npm:puppeteer-core@^24.6.1": "24.6.1_devtools-protocol@0.0.1425554",
     "npm:zod@^3.24.2": "3.24.2"
+  },
+  "jsr": {
+    "@roka/git@0.3.1": {
+      "integrity": "1164a562216c03c3075d8901728edc393333598737fd163c8fe8b92d463c2e8c",
+      "dependencies": [
+        "jsr:@std/assert",
+        "jsr:@std/collections",
+        "jsr:@std/path"
+      ]
+    },
+    "@std/assert@1.0.13": {
+      "integrity": "ae0d31e41919b12c656c742b22522c32fb26ed0cba32975cb0de2a273cb68b29",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/collections@1.0.11": {
+      "integrity": "2f62cf9587484b1fff364f6c3e1f83478eea53dbb6faed6ffeda92ddb6b172f0"
+    },
+    "@std/internal@1.0.6": {
+      "integrity": "9533b128f230f73bd209408bb07a4b12f8d4255ab2a4d22a1fd6d87304aca9a4"
+    },
+    "@std/path@1.0.9": {
+      "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
+    }
   },
   "npm": {
     "@puppeteer/browsers@2.10.0": {
@@ -434,6 +464,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@roka/git@~0.3.1",
       "npm:puppeteer-core@^24.6.1",
       "npm:zod@^3.24.2"
     ]

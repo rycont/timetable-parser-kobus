@@ -1,11 +1,15 @@
+import { git } from '@roka/git'
+
 import { closeBrowser } from './common/cached-crawl.ts'
 import { getRoutePlans } from './kobus/get-route-plans/index.ts'
 import { getTerminals } from './kobus/get-terminals.ts'
 
 const { routes, terminals } = await getTerminals()
 
-const SAMPLES = 20
-const sampledRoutes = routes.toSorted(() => Math.random() - 0.5).slice(0, 20)
+const SAMPLES = 2
+const sampledRoutes = routes
+    .toSorted(() => Math.random() - 0.5)
+    .slice(0, SAMPLES)
 
 let progress = 1
 
@@ -23,4 +27,37 @@ for (const route of sampledRoutes) {
 }
 
 await closeBrowser()
-console.log('Done!')
+console.log('Fetch Done')
+
+// Check if the working directory is dirty(Something changed)
+// If so, we should make a commit!
+
+const outputSubmodule = git({
+    cwd: 'output',
+})
+
+const status = await outputSubmodule.index.status()
+const updatedFiles = status.unstaged.map((d) => d.path)
+
+if (updatedFiles.length === 0) {
+    console.log('Nothing has changed, Terminated.')
+    Deno.exit()
+}
+
+console.log('Updated: ')
+console.log(updatedFiles.join('\n'))
+
+await outputSubmodule.commits.create('Regular Data Update(Submodule)', {
+    all: true,
+})
+await outputSubmodule.commits.push()
+
+console.log('Submodule Pushed to GitHub!')
+
+const workspaceModule = git()
+await workspaceModule.commits.create('Regular Data Update(Workspace)', {
+    all: true,
+})
+await workspaceModule.commits.push()
+
+console.log('Workspace Module Pushed to GitHub!')
