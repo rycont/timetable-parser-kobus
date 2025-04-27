@@ -39,24 +39,22 @@ const outputSubmodule = git({
 const status = await outputSubmodule.index.status()
 const updatedFiles = status.unstaged.map((d) => d.path)
 
-if (updatedFiles.length === 0) {
-    console.log('Nothing has changed, Terminated.')
-    Deno.exit()
+if (updatedFiles.length !== 0) {
+    console.log('Updated: ')
+    console.log(updatedFiles.join('\n'))
+
+    await outputSubmodule.commits.create('Regular Data Update(Submodule)', {
+        all: true,
+    })
+    await outputSubmodule.commits.push()
+
+    console.log('Submodule Pushed to GitHub!')
 }
-
-console.log('Updated: ')
-console.log(updatedFiles.join('\n'))
-
-await outputSubmodule.commits.create('Regular Data Update(Submodule)', {
-    all: true,
-})
-await outputSubmodule.commits.push()
-
-console.log('Submodule Pushed to GitHub!')
 
 const workspaceModule = git({
     cwd: '.',
 })
+console.log(await workspaceModule.index.status())
 await workspaceModule.commits.create('Regular Data Update(Workspace)', {
     all: true,
 })
