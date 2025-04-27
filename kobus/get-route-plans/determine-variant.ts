@@ -53,7 +53,7 @@ export function determineVariant(
 
     const daysByOperatingTypes = {
         ...Object.groupBy(
-            [...operatingCountsByDayMap.keys()],
+            [...operatingCountsByDayMap.keys()].toSorted((a, b) => a - b),
             (day) => operatingCountsByDayMap.get(day)!,
         ),
     }

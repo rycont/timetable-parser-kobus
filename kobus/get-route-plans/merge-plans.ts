@@ -29,7 +29,7 @@ export function mergePlans(
         for (const mergingKey of mergingKeys) {
             const values = plans.map((plan) => plan[mergingKey])
             //@ts-ignore
-            normalizedPlan[mergingKey] = mergeValues(values)
+            normalizedPlan[mergingKey] = mergeValues(values).toSorted()
         }
 
         const {

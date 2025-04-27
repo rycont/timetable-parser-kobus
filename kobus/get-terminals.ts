@@ -5,7 +5,7 @@ import { Route, Terminal } from './types/terminal.ts'
 export async function getTerminals() {
     const [routesRawString] = await cachedCrawl({
         entryPoint: 'https://www.kobus.co.kr/main.do',
-        fileName: 'kobus-terminals.json',
+        fileName: `kobus-terminals.json`,
         targetUri: 'https://www.kobus.co.kr/mrs/readRotLinInf.ajax',
     })
 
@@ -42,14 +42,25 @@ export async function getTerminals() {
         }
     }
 
+    const terminals = Array.from(terminalsMap.values()).toSorted((a, b) =>
+        a.id > b.id ? 1 : -1,
+    )
+
     await Deno.writeTextFile(
         './output/terminals.json',
-        JSON.stringify([...terminalsMap.values()], null, 2),
+        JSON.stringify(terminals, null, 2),
+    )
+
+    const routes = Array.from(routesMap).toSorted((a, b) =>
+        a.departureTerminalId + a.arrivalTerminalId >
+        b.departureTerminalId + b.arrivalTerminalId
+            ? 1
+            : -1,
     )
 
     await Deno.writeTextFile(
         './output/connections.json',
-        JSON.stringify(Array.from(routesMap), null, 2),
+        JSON.stringify(routes, null, 2),
     )
 
     return {

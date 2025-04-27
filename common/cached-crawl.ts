@@ -19,8 +19,10 @@ export async function cachedCrawl({
     fileName: string
     action?: (page: puppeteer.Page) => Promise<void>
 }) {
+    const today = new Date().toISOString().split('T')[0]
+    const cacheFilePath = `${CACHE_DIR}/${today}-${fileName}`
     try {
-        const cache = await Deno.readTextFile(`${CACHE_DIR}/${fileName}`)
+        const cache = await Deno.readTextFile(cacheFilePath)
         console.log('Cache found, using cached data...')
         return JSON.parse(cache) as string[]
     } catch (e) {
@@ -68,7 +70,7 @@ export async function cachedCrawl({
         // Save the content to the cache.
         await Deno.mkdir(CACHE_DIR, { recursive: true })
         await Deno.writeTextFile(
-            `${CACHE_DIR}/${fileName}`,
+            cacheFilePath,
             JSON.stringify(responseContents),
         )
 

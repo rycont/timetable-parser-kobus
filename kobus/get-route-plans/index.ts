@@ -19,6 +19,12 @@ export async function getRoutePlans(
     const mergedPlans = normalizedPlanScheme
         .array()
         .parse(mergePlans(timetableByDate.flat(), timetableByDate.length))
+        .toSorted(
+            (a, b) =>
+                a.departureTime.hour * 60 +
+                a.departureTime.minute -
+                (b.departureTime.hour * 60 + b.departureTime.minute),
+        )
 
     await Deno.writeTextFile(
         `./output/timetable/${departureTerminal.id}-${arrivalTerminal.id}.json`,
