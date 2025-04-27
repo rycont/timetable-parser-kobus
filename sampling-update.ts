@@ -6,7 +6,7 @@ import { getTerminals } from './kobus/get-terminals.ts'
 
 const { routes, terminals } = await getTerminals()
 
-const SAMPLES = 2
+const SAMPLES = 1
 const sampledRoutes = routes
     .toSorted(() => Math.random() - 0.5)
     .slice(0, SAMPLES)
@@ -54,7 +54,9 @@ await outputSubmodule.commits.push()
 
 console.log('Submodule Pushed to GitHub!')
 
-const workspaceModule = git()
+const workspaceModule = git({
+    cwd: '.',
+})
 await workspaceModule.commits.create('Regular Data Update(Workspace)', {
     all: true,
 })
