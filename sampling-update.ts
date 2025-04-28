@@ -41,7 +41,7 @@ const workspaceModule = git({
 })
 
 const status = await outputSubmodule.index.status()
-outputSubmodule.branches.checkout({
+await outputSubmodule.branches.checkout({
     target: 'main',
 })
 const updatedFiles = status.unstaged.map((d) => d.path)
