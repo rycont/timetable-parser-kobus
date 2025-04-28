@@ -6,7 +6,7 @@ import { getTerminals } from './kobus/get-terminals.ts'
 
 const { routes, terminals } = await getTerminals()
 
-const SAMPLES = 1
+const SAMPLES = parseInt(Deno.env.get('UPDATE_SAMPLES') ?? '20', 10)
 const sampledRoutes = routes
     .toSorted(() => Math.random() - 0.5)
     .slice(0, SAMPLES)

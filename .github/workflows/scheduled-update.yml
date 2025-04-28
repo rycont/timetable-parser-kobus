@@ -44,3 +44,4 @@ jobs:
               run: deno run -A --unstable-temporal sampling-update.ts
               env:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+                  UPDATE_SAMPLES: 3
