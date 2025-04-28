@@ -18,11 +18,17 @@ jobs:
                   submodules: 'recursive'
                   # 전체 히스토리를 가져옵니다 (Git 작업에 필요)
                   fetch-depth: 0
+                  persist-credentials: false
 
             - name: Set up Git credentials
               run: |
                   git config --global user.name "rycont"
                   git config --global user.email "reactdev@kakao.com"
+
+            - name: Set up submodule push URL with token
+              run: |
+                  git config --global url."https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+                  git submodule foreach 'git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-kobus.git'
 
             - name: Install Deno
               uses: denoland/setup-deno@v1
@@ -33,11 +39,6 @@ jobs:
               id: setup-chrome
 
             - run: chrome --version
-
-            - name: Set up submodule push URL with token
-              run: |
-                  git config --global url."https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-                  git submodule foreach 'git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-kobus.git'
 
             - name: Run update script
               run: deno run -A --unstable-temporal sampling-update.ts
