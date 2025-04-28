@@ -36,6 +36,10 @@ const outputSubmodule = git({
     cwd: 'output',
 })
 
+const workspaceModule = git({
+    cwd: '.',
+})
+
 const status = await outputSubmodule.index.status()
 const updatedFiles = status.unstaged.map((d) => d.path)
 
@@ -51,10 +55,15 @@ if (updatedFiles.length !== 0) {
     console.log('Submodule Pushed to GitHub!')
 }
 
-const workspaceModule = git({
-    cwd: '.',
-})
-console.log(await workspaceModule.index.status())
+// workspaceModule.index.add('output')
+// const untrackedFiles = (await workspaceModule.index.status()).untracked.map(
+//     (d) => d.path,
+// )
+
+// if (untrackedFiles.length !== 0) {
+//     workspaceModule.index.add(untrackedFiles)
+// }
+
 await workspaceModule.commits.create('Regular Data Update(Workspace)', {
     all: true,
 })
