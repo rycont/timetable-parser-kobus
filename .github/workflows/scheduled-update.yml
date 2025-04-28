@@ -21,16 +21,25 @@ jobs:
 
             - name: Set up Git credentials
               run: |
-                  git config --global user.name "github-actions[bot]"
-                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                  git config --global user.name "rycont"
+                  git config --global user.email "reactdev@kakao.com"
 
             - name: Install Deno
               uses: denoland/setup-deno@v1
               with:
                   deno-version: v2.x
 
+            - uses: browser-actions/setup-chrome@v1
+              id: setup-chrome
+
+            - run: chrome --version
+
+            - name: Set up submodule push URL with token
+              run: |
+                  git config --global url."https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+                  git submodule foreach 'git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-kobus.git'
+
             - name: Run update script
               run: deno run -A --unstable-temporal sampling-update.ts
               env:
-                  # GitHub 액션에서 자동 커밋을 위한 토큰
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
