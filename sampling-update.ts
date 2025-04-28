@@ -41,6 +41,9 @@ const workspaceModule = git({
 })
 
 const status = await outputSubmodule.index.status()
+outputSubmodule.branches.checkout({
+    target: 'main',
+})
 const updatedFiles = status.unstaged.map((d) => d.path)
 
 if (updatedFiles.length !== 0) {
@@ -50,9 +53,7 @@ if (updatedFiles.length !== 0) {
     await outputSubmodule.commits.create('Regular Data Update(Submodule)', {
         all: true,
     })
-    await outputSubmodule.commits.push({
-        branch: 'main',
-    })
+    await outputSubmodule.commits.push()
 
     console.log('Submodule Pushed to GitHub!')
 }
