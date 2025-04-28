@@ -1,0 +1,36 @@
+name: Scheduled Data Update
+
+on:
+    schedule:
+        # 10분마다 실행 (매 시간의 0분, 10분, 20분, 30분, 40분, 50분에 실행)
+        - cron: '*/10 * * * *'
+    # 수동으로 워크플로우를 실행할 수 있도록 추가
+    workflow_dispatch:
+
+jobs:
+    update-data:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  # Git 하위 모듈이 사용된 것 같으므로 하위 모듈도 체크아웃합니다
+                  submodules: 'recursive'
+                  # 전체 히스토리를 가져옵니다 (Git 작업에 필요)
+                  fetch-depth: 0
+
+            - name: Set up Git credentials
+              run: |
+                  git config --global user.name "github-actions[bot]"
+                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+            - name: Install Deno
+              uses: denoland/setup-deno@v1
+              with:
+                  deno-version: v1.x
+
+            - name: Run update script
+              run: deno run -A --unstable-temporal sampling-update.ts
+              env:
+                  # GitHub 액션에서 자동 커밋을 위한 토큰
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

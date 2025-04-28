@@ -50,23 +50,25 @@ if (updatedFiles.length !== 0) {
     await outputSubmodule.commits.create('Regular Data Update(Submodule)', {
         all: true,
     })
-    await outputSubmodule.commits.push()
+    await outputSubmodule.commits.push({
+        branch: 'main',
+    })
 
     console.log('Submodule Pushed to GitHub!')
 }
 
-// workspaceModule.index.add('output')
-// const untrackedFiles = (await workspaceModule.index.status()).untracked.map(
-//     (d) => d.path,
-// )
+await workspaceModule.index.add('output')
+const untrackedFiles = (await workspaceModule.index.status()).untracked.map(
+    (d) => d.path,
+)
 
-// if (untrackedFiles.length !== 0) {
-//     workspaceModule.index.add(untrackedFiles)
-// }
+if (untrackedFiles.length !== 0) {
+    await workspaceModule.index.add(untrackedFiles)
+}
 
-await workspaceModule.commits.create('Regular Data Update(Workspace)', {
-    all: true,
+await workspaceModule.commits.create('Regular Data Update(Workspace)')
+await workspaceModule.commits.push({
+    branch: 'main',
 })
-await workspaceModule.commits.push()
 
 console.log('Workspace Module Pushed to GitHub!')
