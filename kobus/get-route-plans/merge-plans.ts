@@ -29,7 +29,7 @@ export function mergePlans(
         for (const mergingKey of mergingKeys) {
             const values = plans.map((plan) => plan[mergingKey])
             //@ts-ignore
-            normalizedPlan[mergingKey] = mergeValues(values).toSorted()
+            normalizedPlan[mergingKey] = mergeValues(values)
         }
 
         const {
@@ -75,7 +75,7 @@ function mergeFares(fares: PlannedOperation['fare'][]): {
 }
 
 function mergeValues<T>(values: T[]): T[] {
-    const uniqueValues = [...new Set(values)]
+    const uniqueValues = [...new Set(values)].toSorted()
     return uniqueValues
 }
 
