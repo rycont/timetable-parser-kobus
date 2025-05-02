@@ -47,7 +47,7 @@ export function determineVariant(
     if (isSpecificDayOperation) {
         return {
             type: 'specific-day',
-            days: [...operatingCountsByDayMap.keys()],
+            days: [...operatingCountsByDayMap.keys()].toSorted(),
         }
     }
 
