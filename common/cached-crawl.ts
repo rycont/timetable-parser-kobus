@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer-core'
-
-const CACHE_DIR = Deno.env.get('CACHE_DIR') || './cache'
+import { createCacheFileName } from './cache-file-name.ts'
+import { CACHE_DIR } from '../const.ts'
 
 const browser = await puppeteer.launch({
     executablePath: Deno.env.get('CHROME_PATH') || '/usr/local/bin/chrome',
@@ -19,8 +19,7 @@ export async function cachedCrawl({
     fileName: string
     action?: (page: puppeteer.Page) => Promise<void>
 }) {
-    const today = new Date().toISOString().split('T')[0]
-    const cacheFilePath = `${CACHE_DIR}/${today}-${fileName}`
+    const cacheFilePath = createCacheFileName(fileName)
     try {
         const cache = await Deno.readTextFile(cacheFilePath)
         console.log('Cache found, using cached data...')

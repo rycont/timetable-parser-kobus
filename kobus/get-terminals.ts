@@ -47,7 +47,7 @@ export async function getTerminals() {
         a.id > b.id ? 1 : -1,
     )
 
-    await saveData('terminals', JSON.stringify(terminals, null, 2))
+    await saveData('kobus', 'terminals', JSON.stringify(terminals, null, 2))
 
     const routes = Array.from(routesMap).toSorted((a, b) =>
         a.departureTerminalId + a.arrivalTerminalId >
@@ -56,7 +56,7 @@ export async function getTerminals() {
             : -1,
     )
 
-    await saveData('connections', JSON.stringify(routes, null, 2))
+    await saveData('kobus', 'connections', JSON.stringify(routes, null, 2))
 
     return {
         terminals: terminalsMap,

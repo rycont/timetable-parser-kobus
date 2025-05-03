@@ -1,7 +1,11 @@
-export default async function saveData(name: string, data: string) {
-    await Deno.writeTextFile(`./output/${name}.json`, data)
+export default async function saveData(
+    outputType: string,
+    name: string,
+    data: string,
+) {
+    await Deno.writeTextFile(`./${outputType}-output/${name}.json`, data)
     await Deno.writeTextFile(
-        `./output/${name}.metadata.json`,
+        `./${outputType}-output/${name}.metadata.json`,
         JSON.stringify(
             {
                 updatedAt: new Date().toISOString(),
@@ -11,5 +15,5 @@ export default async function saveData(name: string, data: string) {
         ),
     )
 
-    console.log(`Saved ${name} data to output/${name}.json`)
+    console.log(`Saved ${name} data to ${outputType}-output/${name}.json`)
 }

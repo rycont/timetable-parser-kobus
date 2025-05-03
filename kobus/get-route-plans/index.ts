@@ -28,6 +28,7 @@ export async function getRoutePlans(
         )
 
     await saveData(
+        'kobus',
         `timetable/${departureTerminal.id}-${arrivalTerminal.id}`,
         JSON.stringify(mergedPlans, null, 2),
     )
