@@ -9,10 +9,10 @@ on:
         inputs:
             Samples:
                 required: true
-                default: 5
+                default: 15
             Repetitions:
                 required: true
-                default: 10
+                default: 5
                 description: 'Number of times to repeat the update process'
 
 jobs:
@@ -53,13 +53,13 @@ jobs:
             - uses: browser-actions/setup-chrome@v1
               id: setup-chrome
 
-            - name: Run update script ${{ github.event.inputs.Repetitions || 10 }} times
+            - name: Run update script ${{ github.event.inputs.Repetitions || 5 }} times
               run: |
-                  for i in {1..${{ github.event.inputs.Repetitions || 10 }}}; do
+                  for i in {1..${{ github.event.inputs.Repetitions || 5 }}}; do
                       echo "Executing run $i of ${{ github.event.inputs.Repetitions || 10 }}"
                       deno run -A --unstable-temporal sampling-update.ts || echo "Run $i failed, continuing to next run"
                       sleep 5  # Adding a small pause between runs
                   done
               env:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 5 }}
+                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 15 }}
