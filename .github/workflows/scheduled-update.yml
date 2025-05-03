@@ -2,10 +2,14 @@ name: Scheduled Data Update
 
 on:
     # schedule:
-        # 20분마다 실행
-        # - cron: '*/20 * * * *'
+    # 20분마다 실행
+    # - cron: '*/20 * * * *'
     # 수동으로 워크플로우를 실행할 수 있도록 추가
     workflow_dispatch:
+        inputs:
+            Samples:
+                required: true
+                default: 10
 
 jobs:
     update-data:
@@ -14,9 +18,9 @@ jobs:
             - name: Set Timezone
               uses: szenius/set-timezone@v2.0
               with:
-                  timezoneLinux: "Asia/Seoul"
-                  timezoneMacos: "Asia/Seoul"
-                  timezoneWindows: "Korea Standard Time"
+                  timezoneLinux: 'Asia/Seoul'
+                  timezoneMacos: 'Asia/Seoul'
+                  timezoneWindows: 'Korea Standard Time'
 
             - name: Checkout code
               uses: actions/checkout@v3
@@ -51,4 +55,4 @@ jobs:
               run: deno run -A --unstable-temporal sampling-update.ts
               env:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-                  UPDATE_SAMPLES: 10
+                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples }}
