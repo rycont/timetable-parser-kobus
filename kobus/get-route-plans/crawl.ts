@@ -6,7 +6,6 @@ export async function fetchKobusPlans(
     arrivalTerminal: Terminal,
 ): Promise<string[]> {
     const date = new Date()
-    date.setDate(date.getDate() + 1)
 
     const fileName = `kobus-route-plans-${departureTerminal.id}-${arrivalTerminal.id}.json`
 
@@ -22,6 +21,21 @@ export async function fetchKobusPlans(
                 await dialog.dismiss()
                 console.log('Dialog dismissed')
             })
+
+            // Get "#deprDtm" hidden input value
+            const hiddenInputValue = (await page.evaluate(
+                `document.querySelector("#deprDtm").value`,
+            )) as string
+
+            const yyyy = hiddenInputValue.slice(0, 4)
+            const mm = hiddenInputValue.slice(4, 6)
+            const dd = hiddenInputValue.slice(6, 8)
+
+            date.setFullYear(parseInt(yyyy))
+            date.setMonth(parseInt(mm) - 1)
+            date.setDate(parseInt(dd) + 1)
+
+            console.log(`기준일: ${hiddenInputValue}`)
 
             // Set departure and arrival terminals
             await page.evaluate(

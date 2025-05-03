@@ -34,5 +34,8 @@
                 }
             }
         }
+    },
+    "remoteEnv": {
+        "TZ": "Asia/Seoul"
     }
 }

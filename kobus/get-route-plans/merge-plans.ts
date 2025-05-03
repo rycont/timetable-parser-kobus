@@ -75,7 +75,9 @@ function mergeFares(fares: PlannedOperation['fare'][]): {
 }
 
 function mergeValues<T>(values: T[]): T[] {
-    const uniqueValues = [...new Set(values)].toSorted()
+    const uniqueValues = [...new Set(values)].toSorted((a, b) =>
+        a < b ? -1 : a > b ? 1 : 0,
+    )
     return uniqueValues
 }
 

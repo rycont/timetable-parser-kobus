@@ -1,8 +1,11 @@
+console.log('Today:', new Date().toISOString().slice(0, 10))
+
 import { git } from '@roka/git'
 
 import { closeBrowser } from './common/cached-crawl.ts'
 import { getRoutePlans } from './kobus/get-route-plans/index.ts'
 import { getTerminals } from './kobus/get-terminals.ts'
+import removeOldCaches from './remove-old-caches.ts'
 
 const { routes, terminals } = await getTerminals()
 
@@ -44,11 +47,15 @@ const status = await outputSubmodule.index.status()
 await outputSubmodule.branches.checkout({
     target: 'main',
 })
-const updatedFiles = status.unstaged.map((d) => d.path)
+const updatedFiles = [...status.unstaged, ...status.untracked].map(
+    (d) => d.path,
+)
 
 if (updatedFiles.length !== 0) {
     console.log('Updated: ')
     console.log(updatedFiles.join('\n'))
+
+    await outputSubmodule.index.add(updatedFiles)
 
     await outputSubmodule.commits.create('Regular Data Update(Submodule)', {
         all: true,
@@ -59,12 +66,12 @@ if (updatedFiles.length !== 0) {
 }
 
 await workspaceModule.index.add('output')
-const untrackedFiles = (await workspaceModule.index.status()).untracked.map(
+const createdCaches = (await workspaceModule.index.status()).untracked.map(
     (d) => d.path,
 )
 
-if (untrackedFiles.length !== 0) {
-    await workspaceModule.index.add(untrackedFiles)
+if (createdCaches.length !== 0) {
+    await workspaceModule.index.add(createdCaches)
 }
 
 await workspaceModule.commits.create('Regular Data Update(Workspace)')
@@ -73,3 +80,4 @@ await workspaceModule.commits.push({
 })
 
 console.log('Workspace Module Pushed to GitHub!')
+await removeOldCaches()

@@ -9,7 +9,7 @@ export default async function removeOldCaches() {
         if (file.isFile && file.name.split('-')[0] !== today) {
             const filePath = `${CACHE_DIR}/${file.name}`
             console.log(`Deleting old cache file: ${filePath}`)
-            // await Deno.remove(filePath)
+            await Deno.remove(filePath)
         }
 
         console.log(`Cache directory cleaned up. Old caches removed.`)
