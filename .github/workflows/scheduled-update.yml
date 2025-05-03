@@ -1,9 +1,9 @@
 name: Scheduled Data Update
 
 on:
-    # schedule:
-    # 20분마다 실행
-    # - cron: '*/20 * * * *'
+    schedule:
+        # 20분마다 실행
+        - cron: '*/20 * * * *'
     # 수동으로 워크플로우를 실행할 수 있도록 추가
     workflow_dispatch:
         inputs:
@@ -55,4 +55,4 @@ jobs:
               run: deno run -A --unstable-temporal sampling-update.ts
               env:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples }}
+                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 10 }}
