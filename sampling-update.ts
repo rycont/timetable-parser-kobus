@@ -49,11 +49,14 @@ async function pushAll(directory: string) {
         console.log('No changes to commit')
         return
     }
+
     console.log('Dirty files:')
     console.log(dirtyFiles.join('\n'))
-    // await gitModule.index.add(dirtyFiles)
+
+    await gitModule.index.add(dirtyFiles)
+
     await gitModule.commits.create('Regular Data Update', {
-        all: true
+        all: true,
     })
     await gitModule.commits.push({
         branch: 'main',
