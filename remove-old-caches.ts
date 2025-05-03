@@ -6,7 +6,7 @@ export default async function removeOldCaches() {
 
     // 생성된 날짜가 오늘이 아닌 캐시 파일을 삭제합니다.
     for await (const file of Deno.readDir(CACHE_DIR)) {
-        if (file.isFile && file.name.split('-')[0] !== today) {
+        if (file.isFile && file.name.slice(0, 10) !== today) {
             const filePath = `${CACHE_DIR}/${file.name}`
             console.log(`Deleting old cache file: ${filePath}`)
             await Deno.remove(filePath)
