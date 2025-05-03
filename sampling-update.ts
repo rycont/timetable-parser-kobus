@@ -39,12 +39,6 @@ async function pushAll(directory: string) {
         cwd: directory,
     })
 
-    try {
-        await gitModule.commits.pull()
-    } catch (e) {
-        console.log('Error pulling from git, But we can continue', e)
-    }
-
     const status = await gitModule.index.status()
 
     const dirtyFiles = [...status.unstaged, ...status.untracked].map(
