@@ -1,9 +1,9 @@
 name: Scheduled Data Update
 
 on:
-    schedule:
+    # schedule:
         # 20분마다 실행
-        - cron: '*/20 * * * *'
+        # - cron: '*/20 * * * *'
     # 수동으로 워크플로우를 실행할 수 있도록 추가
     workflow_dispatch:
 
