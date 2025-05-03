@@ -2,14 +2,18 @@ name: Scheduled Data Update
 
 on:
     schedule:
-        # 20분마다 실행
-        - cron: '*/20 * * * *'
+        # 30분마다 실행
+        - cron: '*/30 * * * *'
     # 수동으로 워크플로우를 실행할 수 있도록 추가
     workflow_dispatch:
         inputs:
             Samples:
                 required: true
+                default: 5
+            Repetitions:
+                required: true
                 default: 10
+                description: 'Number of times to repeat the update process'
 
 jobs:
     update-data:
@@ -49,10 +53,13 @@ jobs:
             - uses: browser-actions/setup-chrome@v1
               id: setup-chrome
 
-            - run: chrome --version
-
-            - name: Run update script
-              run: deno run -A --unstable-temporal sampling-update.ts
+            - name: Run update script 10 times
+              run: |
+                  for i in {1..${{ github.event.inputs.Repetitions || 10 }}}; do
+                      echo "Executing run $i of ${{ github.event.inputs.Repetitions || 10 }}"
+                      deno run -A --unstable-temporal sampling-update.ts || echo "Run $i failed, continuing to next run"
+                      sleep 5  # Adding a small pause between runs
+                  done
               env:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 10 }}
+                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 5 }}

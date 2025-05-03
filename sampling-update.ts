@@ -39,6 +39,8 @@ async function pushAll(directory: string) {
         cwd: directory,
     })
 
+    await gitModule.commits.pull()
+
     const status = await gitModule.index.status()
 
     const dirtyFiles = [...status.unstaged, ...status.untracked].map(
