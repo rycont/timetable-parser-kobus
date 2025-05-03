@@ -1,4 +1,5 @@
 import { cachedCrawl } from '../common/cached-crawl.ts'
+import saveData from '../common/save-data.ts'
 import { rawRouteResponseScheme } from './types/terminal-raw.ts'
 import { Route, Terminal } from './types/terminal.ts'
 
@@ -46,10 +47,7 @@ export async function getTerminals() {
         a.id > b.id ? 1 : -1,
     )
 
-    await Deno.writeTextFile(
-        './output/terminals.json',
-        JSON.stringify(terminals, null, 2),
-    )
+    await saveData('terminals', JSON.stringify(terminals, null, 2))
 
     const routes = Array.from(routesMap).toSorted((a, b) =>
         a.departureTerminalId + a.arrivalTerminalId >
@@ -58,10 +56,7 @@ export async function getTerminals() {
             : -1,
     )
 
-    await Deno.writeTextFile(
-        './output/connections.json',
-        JSON.stringify(routes, null, 2),
-    )
+    await saveData('connections', JSON.stringify(routes, null, 2))
 
     return {
         terminals: terminalsMap,

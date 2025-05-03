@@ -1,3 +1,4 @@
+import saveData from '../../common/save-data.ts'
 import {
     normalizedPlanScheme,
     rawPlanListResponseScheme,
@@ -26,8 +27,8 @@ export async function getRoutePlans(
                 (b.departureTime.hour * 60 + b.departureTime.minute),
         )
 
-    await Deno.writeTextFile(
-        `./output/timetable/${departureTerminal.id}-${arrivalTerminal.id}.json`,
+    await saveData(
+        `timetable/${departureTerminal.id}-${arrivalTerminal.id}`,
         JSON.stringify(mergedPlans, null, 2),
     )
 
