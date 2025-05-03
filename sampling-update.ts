@@ -66,12 +66,17 @@ if (updatedFiles.length !== 0) {
 }
 
 await workspaceModule.index.add('output')
-const createdCaches = (await workspaceModule.index.status()).untracked.map(
-    (d) => d.path,
-)
 
-if (createdCaches.length !== 0) {
-    await workspaceModule.index.add(createdCaches)
+await removeOldCaches()
+const workspaceStatus = await workspaceModule.index.status()
+
+const updatedFilesInWorkspace = [
+    ...workspaceStatus.unstaged,
+    ...workspaceStatus.untracked,
+].map((d) => d.path)
+
+if (updatedFilesInWorkspace.length !== 0) {
+    await workspaceModule.index.add(updatedFilesInWorkspace)
 }
 
 await workspaceModule.commits.create('Regular Data Update(Workspace)')
@@ -80,4 +85,3 @@ await workspaceModule.commits.push({
 })
 
 console.log('Workspace Module Pushed to GitHub!')
-await removeOldCaches()
