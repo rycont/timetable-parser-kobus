@@ -39,6 +39,10 @@ async function pushAll(directory: string) {
         cwd: directory,
     })
 
+    await gitModule.branches.checkout({
+        target: 'main',
+    })
+
     const status = await gitModule.index.status()
 
     const dirtyFiles = [...status.unstaged, ...status.untracked].map(
@@ -58,9 +62,7 @@ async function pushAll(directory: string) {
     await gitModule.commits.create('Regular Data Update', {
         all: true,
     })
-    await gitModule.commits.push({
-        branch: 'main',
-    })
+    await gitModule.commits.push()
     console.log(directory, 'Pushed to GitHub!')
 }
 
