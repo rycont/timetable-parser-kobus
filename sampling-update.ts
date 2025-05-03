@@ -39,7 +39,11 @@ async function pushAll(directory: string) {
         cwd: directory,
     })
 
-    await gitModule.commits.pull()
+    try {
+        await gitModule.commits.pull()
+    } catch (e) {
+        console.log('Error pulling from git, But we can continue', e)
+    }
 
     const status = await gitModule.index.status()
 
