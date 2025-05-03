@@ -11,7 +11,7 @@ export default async function removeOldCaches() {
             console.log(`Deleting old cache file: ${filePath}`)
             await Deno.remove(filePath)
         }
-
-        console.log(`Cache directory cleaned up. Old caches removed.`)
     }
+
+    console.log(`Cache directory cleaned up. Old caches removed.`)
 }
