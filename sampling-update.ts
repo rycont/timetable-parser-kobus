@@ -32,56 +32,32 @@ for (const route of sampledRoutes) {
 await closeBrowser()
 console.log('Fetch Done')
 
-// Check if the working directory is dirty(Something changed)
-// If so, we should make a commit!
-
-const outputSubmodule = git({
-    cwd: 'output',
-})
-
-const workspaceModule = git({
-    cwd: '.',
-})
-
-const status = await outputSubmodule.index.status()
-await outputSubmodule.branches.checkout({
-    target: 'main',
-})
-const updatedFiles = [...status.unstaged, ...status.untracked].map(
-    (d) => d.path,
-)
-
-if (updatedFiles.length !== 0) {
-    console.log('Updated: ')
-    console.log(updatedFiles.join('\n'))
-
-    await outputSubmodule.index.add(updatedFiles)
-
-    await outputSubmodule.commits.create('Regular Data Update(Submodule)', {
-        all: true,
-    })
-    await outputSubmodule.commits.push()
-
-    console.log('Submodule Pushed to GitHub!')
-}
-
-await workspaceModule.index.add('output')
-
 await removeOldCaches()
-const workspaceStatus = await workspaceModule.index.status()
 
-const updatedFilesInWorkspace = [
-    ...workspaceStatus.unstaged,
-    ...workspaceStatus.untracked,
-].map((d) => d.path)
+async function pushAll(directory: string) {
+    const gitModule = git({
+        cwd: directory,
+    })
 
-if (updatedFilesInWorkspace.length !== 0) {
-    await workspaceModule.index.add(updatedFilesInWorkspace)
+    const status = await gitModule.index.status()
+
+    const dirtyFiles = [...status.unstaged, ...status.untracked].map(
+        (d) => d.path,
+    )
+
+    if (dirtyFiles.length === 0) {
+        console.log('No changes to commit')
+        return
+    }
+    console.log('Dirty files:')
+    console.log(dirtyFiles.join('\n'))
+    await gitModule.index.add(dirtyFiles)
+    await gitModule.commits.create('Regular Data Update')
+    await gitModule.commits.push({
+        branch: 'main',
+    })
+    console.log(directory, 'Pushed to GitHub!')
 }
 
-await workspaceModule.commits.create('Regular Data Update(Workspace)')
-await workspaceModule.commits.push({
-    branch: 'main',
-})
-
-console.log('Workspace Module Pushed to GitHub!')
+await pushAll('kobus-output')
+await pushAll('.')
