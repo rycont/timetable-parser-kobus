@@ -1,5 +1,5 @@
-import { cachedFetch } from "../../common/cached-fetch.ts";
-import { formatLocalDate } from "../../common/format-local-date.ts";
+import { cachedFetch } from '../../common/cached-fetch.ts'
+import { formatLocalDate } from '../../common/format-local-date.ts'
 import { Terminal } from '../../common/scheme/terminal.ts'
 
 const URI = 'https://intercitybus.tmoney.co.kr/runinf/readRunInfList.do'
@@ -29,4 +29,5 @@ export async function getSpecificDayPlan(
     formData.append('deprTime', '00:00')
     formData.append('bef_Aft_Dvs', 'D')
     formData.append('req_Rec_Num', '10')
+    formData.append('depr_Time', '00:00')
 }
