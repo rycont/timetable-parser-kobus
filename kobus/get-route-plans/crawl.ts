@@ -1,5 +1,6 @@
 import { cachedCrawl } from '../../common/cached-crawl.ts'
-import { Terminal } from '../types/terminal.ts'
+import { formatLocalDate } from '../../common/format-local-date.ts'
+import { Terminal } from '../../common/scheme/terminal.ts'
 
 export async function fetchKobusPlans(
     departureTerminal: Terminal,
@@ -72,12 +73,4 @@ document.querySelector("#alcnSrchBtn").children[0].click()`,
     })
 
     return rawResult
-}
-
-function formatLocalDate(date: Date): string {
-    return [
-        date.getFullYear(),
-        (date.getMonth() + 1).toString().padStart(2, '0'),
-        date.getDate().toString().padStart(2, '0'),
-    ].join('')
 }

@@ -1,0 +1,656 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8" />
+	<title>시외버스 통합예매시스템</title>
+	<meta name="description" content="시외버스예매, 시외버스예매 승차권, 조회, 운행정보 등 제공.">
+	<meta name="keywords" content="시외버스예매">
+	<meta name="naver-site-verification" content="a3885f9b09e0dc0d722244584795205ada4b70f8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="robots" content="noindex,nofollow">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="/css/common.css"><!-- 공통 css -->
+	<link rel="stylesheet" type="text/css" href="/css/layout.css">
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="/js/html5.js"></script>
+	<![endif]-->
+
+<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/scrollbar.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
+	<script type="text/javascript" src="/js/dui_prototype.js"></script>
+	<script type="text/javascript" src="/js/framework/dui_webvalidator.js"></script>
+<script type="text/javascript"></script>
+
+<style type="text/css">
+.one {
+	background-color:#fff;
+	color:#000; 
+	font-size:12px;
+	text-align:center;
+	margin-top:-7px;
+	height:12px;
+	border-radius:3px;
+	border:1px solid #c5c5c5;
+}
+.one > li {float:left;}
+.one ul {display:none;}
+.one li:hover > ul {display:block;}
+.one li:hover > span {display:none;}
+.two {
+	background-color:#fff;
+	background:none;
+	color:#000; 
+	position:relative;
+	margin-top:-9px;
+	height:12px;
+	border-radius:3px;
+}
+.two li {
+	background:none;
+	color:#000;
+}
+</style>
+
+<!-- =============================================================================== -->
+<!-- 웹접근성 참조 추가 - start -->
+<link rel="stylesheet" type="text/css" href="/accessibility/accessibility.css">
+<!-- :: 웹접근성 참조 추가 - end -->
+<!-- =============================================================================== -->
+
+</head>
+
+<body>
+	<div class="skipnav">
+		<a href="#contents">본문 바로가기</a>
+	</div>
+	<span class="wrap_bg"></span>
+	<div id="wrapper">
+		<!-- 2016-06-30 -->
+		<div class="popup_bg_blk"></div>
+		<!-- 2016-06-30 -->
+		<!-- sub1, sub2 ~ sub5 까지 visual 교체 -->
+		<header id="header" class="sub1">
+			<span class="header_bg"></span>
+			<div class="util_menu"><!-- 유틸메뉴 -->
+				<div class="util_mid">
+					<ul>
+						<li><a href='/main.do'>홈</a></li>
+						<li><a href='/usesite/siteMap.do'>사이트맵</a></li>
+						<li>
+							<ul class="one">
+								<li>
+									<span>&nbsp;&nbsp; Language &nbsp;&nbsp;</span>
+									<ul class="two">
+										<li><a href="https://intercitybus.tmoney.co.kr" style="color:#000;" title="한국어 페이지 바로가기" aria-label="한국어 페이지 바로가기">&nbsp; 한국어 </a></li>
+										<li><a href="https://intercitybuse.tmoney.co.kr" style="color:#000;" title="영문 페이지 바로가기" aria-label="영문 페이지 바로가기"> English </a></li>
+										<li><a href="https://intercitybusc.tmoney.co.kr" style="color:#000;" title="중국어 페이지 바로가기" aria-label="중국어 페이지 바로가기"> 中國語 </a></li>
+										<li><a href="https://intercitybusj.tmoney.co.kr" style="color:#000;" title="일본어 페이지 바로가기" aria-label="일본어 페이지 바로가기"> 日本語 </a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>	
+				</div>
+			</div>
+
+			<section class="header_cont">
+				<div class="header_mid" style="background:none;">
+					<a href="#" class="btn_mobile_tog"></a>
+					<h1><a href='/main.do'><img src="/images/img/logo_off.png" alt="T money 로고" /></a></h1>
+					<nav class="nav" aria-label="상단 메인 메뉴바"><!-- GNB -->
+						<ul>
+							<li class="menu1"><a href='/otck/trmlInfEnty.do'><span>시외버스 예매</span></a>
+								<div class="depth2">
+									<ul>
+										<li><a href='/otck/trmlInfEnty.do'>승차권 예매</a></li>
+										<li><a href='/mrs/cardNumEnty.do'>예매조회/취소/변경</a></li>
+										<li><a href='/recp/recpEnty.do'>영수증 발행</a></li>
+									</ul>
+								</div>
+							</li>
+							<li class="menu2"><a href='/runinf/runInf.do'><span>운행정보</span></a>
+								<div class="depth2">
+									<ul>
+										<li><a href='/runinf/runInf.do'>노선/운행정보</a></li>
+									</ul>
+								</div>
+							</li>
+							<li class="menu3"><a href='/useinf/mrsInfo.do'><span>이용안내</span></a>
+								<div class="depth2">
+									<ul>
+										<li><a href='/useinf/mrsInfo.do'>승차권 예매 안내</a></li>
+										<!--2016-07-06 <li><a href='/useinf/disCntInf.do'>할인제도 안내</a></li> -->
+										<li><a href='/useinf/cancInf.do'>예매 변경 및 취소 안내</a></li>
+										<li><a href='/useinf/mobileInf.do'>모바일 이용안내</a></li>
+										<li><a href='/useinf/trmlInf.do'>터미널 및 운수사 안내</a></li>
+										<li><a href='/useinf/cashReceipt.do'>현금영수증 안내</a></li>
+									</ul>
+								</div>
+							</li>
+							<li class="menu4"><a href='/support/notice.do'><span>고객지원</span></a>
+								<div class="depth2">
+									<ul>
+										<li><a href='/support/notice.do'>공지사항</a></li>
+										<li><a href='/support/faq.do'>FAQ</a></li>
+										<li><a href='/support/question.do'>고객의 소리</a></li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+						<span class="mobile_ver">
+							<table style="width:80%; margin-left:10%;">
+								<caption>언어 선택</caption>
+								<colgroup>
+									<col style="width:50%">
+									<col style="width:50%">
+								</colgroup>
+								<thead class="ac-thead-hidden">
+									<tr>
+										<th scope="col">언어(한/영)</th>
+										<th scope="col">언어(중/일)</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="text-align:center; border-left:solid 2px #ccc; border-right:solid 2px #ccc; padding:3px 0;">
+											<a href="https://intercitybus.tmoney.co.kr" title="한국어 페이지 바로가기" aria-label="한국어 페이지 바로가기">한국어</a>
+										</td>
+										<td style="text-align:center; border-left:solid 2px #ccc; border-right:solid 2px #ccc; padding:3px 0;">
+											<a href="https://intercitybuse.tmoney.co.kr" title="영문 페이지 바로가기" aria-label="영문 페이지 바로가기">English</a>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align:center; border-left:solid 2px #ccc; border-right:solid 2px #ccc; padding:3px 0;">
+											<a href="https://intercitybusc.tmoney.co.kr" title="중국어 페이지 바로가기" aria-label="중국어 페이지 바로가기">中國語</a>
+										</td>
+										<td style="text-align:center; border-left:solid 2px #ccc; border-right:solid 2px #ccc; padding:3px 0;">
+											<a href="https://intercitybusj.tmoney.co.kr" title="일본어 페이지 바로가기" aria-label="일본어 페이지 바로가기">日本語</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</span>
+					</nav>
+				</div>
+			</section>
+		</header>
+
+		<hr />
+
+		<!-- 바디 -->
+		
+
+
+
+
+
+
+
+
+
+
+
+		<hr />
+
+		<article id="body">
+			<section id="contents"><!-- 컨텐츠 영역 -->
+				<div class="location_wrap">
+					<!-- 모바일 로케이션 -->
+					<div class="mobile_location">
+						<span>홈</span>
+						<span>운행정보</span>	
+						<span><strong>노선/운행정보</strong></span>
+					</div>
+					<!-- //모바일 로케이션 -->
+					<div class="location">
+						<ul>
+							
+							<li class="home"><a href='/main.do'><span>Home</span></a></li>
+							<li>
+								<div class="select_style3" data-ui-type="selectbox" style="width:170px;">
+									<p class="default"><a href="#" title="주요메뉴 열기/닫기">운행정보</a></p>
+									<ul>
+										<li><a href='/otck/trmlInfEnty.do'>시외버스 예매</a></li>
+										<li><a href='/runinf/runInf.do'>운행정보</a></li>
+										<li><a href='/useinf/mrsInfo.do'>이용안내</a></li>
+										<li><a href='/support/notice.do'>고객지원</a></li>
+									</ul>
+								</div>
+							</li>
+							<!-- 2뎁스 하위메뉴 -->
+							<!-- 승차권 예매 하위메뉴 -->
+							<!--
+							<li>
+								<div class="select_style3" data-ui-type="selectbox" style="width:170px;">
+									<p class="default"><a href="#" title="승차권 예매 하위메뉴 열기/닫기">승차권 예매</a></p>
+									<ul>
+										<li><a href="#">승차권 예매</a></li>
+										<li><a href="#">예매조회/취소/변경</a></li>
+									</ul>
+								</div>
+							</li>
+							-->
+							<!-- 운행정보 하위메뉴 -->
+							<li>
+								<div class="select_style3" data-ui-type="selectbox" style="width:170px;">
+									<p class="default"><a href="#" title="운행정보 하위메뉴 열기/닫기">노선/운행정보</a></p>
+									<ul>
+										<li><a href='/runinf/runInf.do'>노선/운행정보</a></li>
+									</ul>
+								</div>
+							</li>
+							<!-- 이용안내 하위메뉴 -->
+							<!-- <li>
+								<div class="select_style3" data-ui-type="selectbox" style="width:170px;">
+									<p class="default"><a href="#" title="이용안내 하위메뉴 열기/닫기">승차권 예매 안내</a></p>
+									<ul>
+										<li><a href="#">승차권 예매 안내</a></li>
+										<li><a href="#">예매 취소/수수료 안내</a></li>
+										<li><a href="#">모바일 이용안내</a></li>
+										<li><a href="#">터미널 및 운수사 안내</a></li>
+										<li><a href="#">현금영수증 안내</a></li>
+									</ul>
+								</div>
+							</li> -->
+							<!-- 고객지원 하위메뉴 -->
+							<!-- <li>
+								<div class="select_style3" data-ui-type="selectbox" style="width:170px;">
+									<p class="default"><a href="#" title="고객지원 하위메뉴 열기/닫기">문화센터 소개</a></p>
+									<ul>
+										<li><a href="#">공지사항</a></li>
+										<li><a href="#">FAQ</a></li>
+										<li><a href="#">고객의 소리</a></li>
+									</ul>
+								</div>
+							</li> -->
+							<!-- 3뎁스 하위메뉴 -->
+
+							<!-- 마지막 arrow 제일 하단에 위치 -->
+							<li class="last">
+								<div class="select_style3" data-ui-type="selectbox" style="width:170px;">
+									<p class="default"><a href="#" title="default">&nbsp;</a></p>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="cont_wrap">
+					<h2>노선/운행정보</h2>
+					<div class="cont">
+						<!-- 모바일일 때만 활성화 -->
+						<div class="mobile_cont">
+							<dl>
+								<dt>노선/운행정보</dt>
+								<dd>시외버스 실시간 운행시간 및 잔여석을 확인할 수 있습니다.</dd>
+							</dl>
+						</div>
+						<!-- -->
+						<div class="left_cont">
+							<dl>
+								<dt>운행정보 조회</dt>
+								<dd>시외버스 및 일부 고속버스 운행정보 조회</dd>
+							</dl>
+						</div>
+						
+						<div class="right_cont">
+							<!-- 컨텐츠 페이지 시작 -->
+							<div class="cont_min">
+
+								<div class="run_info_area">
+								<form id="runInfo" name="runInfo" method="post" action="/runinf/readRunInfList.do">
+									<input type="hidden" id="message" value=""/>	
+									<input type="hidden" name="depr_Trml_Cd" class="depr_Trml_Cd" id="depr_Trml_Cd">
+									<input type="hidden" name="arvl_Trml_Cd" class="arvl_Trml_Cd" id="arvl_Trml_Cd">
+									<div class="run_info_left">
+										<div class="run_info_left_wrap">
+											<h3>운행정보 조회</h3>
+											<p>시외버스 및 일부 고속버스<br />운행정보 조회</p>
+										</div>
+									</div>
+
+									<div class="run_info_right">
+										<dl>
+											<dt><label for="depr_Trml_Nm">출발지</label></dt>
+											<dd>
+												<div class="search">
+													<input type="text" class="input_w12 Nm WV:출발지:true" name="depr_Trml_Nm" id="depr_Trml_Nm"  placeholder="출발지 선택" onclick="showLayer($('[data-layer-name=\'terminal_select01\']')); return false;" readonly="readonly">
+													<a href="#" onclick="showLayer($('[data-layer-name=\'terminal_select01\']')); return false;"><span>출발지</span></a>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="arvl_Trml_Nm">도착지</label></dt>
+											<dd>
+												<div class="search">
+													<input type="text" class="input_w12 Nm WV:도착지:true" name="arvl_Trml_Nm" id="arvl_Trml_Nm" placeholder="도착지 선택" onclick="showLayer($('[data-layer-name=\'terminal_select02\']')); return false;" readonly="readonly" >
+													<a href="#" onclick="showLayer($('[data-layer-name=\'terminal_select02\']')); return false;"><span>도착지</span></a>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="depr_Dt">출발일</label></dt>
+											<dd>
+												<div class="date2"><input type="text" id="depr_Dt" name="depr_Dt"  value='2025-05-04' class="datepicker WV:가는날:true:minDate=20250504(YYYYMMDD)" readonly="readonly" /></div>
+											</dd>
+										</dl>
+										<dl>
+											<dt>출발시간</dt>
+											<dd>
+												<div class="select_type1 select_w4" data-select="select">
+													<p class="default"><a href="#" id="depr_Time">09:00</a></p>
+													<ul>
+														<li><a href="#">00:00</a></li>
+														<li><a href="#">01:00</a></li>
+														<li><a href="#">02:00</a></li>
+														<li><a href="#">03:00</a></li>
+														<li><a href="#">04:00</a></li>
+														<li><a href="#">05:00</a></li>
+														<li><a href="#">06:00</a></li>
+														<li><a href="#">07:00</a></li>
+														<li><a href="#">08:00</a></li>
+														<li><a href="#">09:00</a></li>
+														<li><a href="#">10:00</a></li>
+														<li><a href="#">11:00</a></li>
+														<li><a href="#">12:00</a></li>
+														<li><a href="#">13:00</a></li>
+														<li><a href="#">14:00</a></li>
+														<li><a href="#">15:00</a></li>
+														<li><a href="#">16:00</a></li>
+														<li><a href="#">17:00</a></li>
+														<li><a href="#">18:00</a></li>
+														<li><a href="#">19:00</a></li>
+														<li><a href="#">20:00</a></li>
+														<li><a href="#">21:00</a></li>
+														<li><a href="#">22:00</a></li>
+														<li><a href="#">23:00</a></li>
+													</ul>
+												</div>
+											</dd>
+										</dl>
+										<p class="search_area1"><a href="#" onclick="readRunInfList('D',10); return false;"><span class="pc_ver">조회</span><span class="mobile_ver">조회하기</span></a></p>
+									</div>
+									</form>
+								</div>
+								
+								<ul class="check_box_area">
+									<li><span>운행정보 메뉴에서는 시외버스 및 일부 고속버스 운행정보 조회를 서비스 하고 있습니다.</span></li>
+									<li><span>운행정보 조회기간은 해당 노선의 배차정보가 입력된 일자까지 가능합니다. 배차정보의 입력은 출발지 터미널에서 처리하고 있으며, 일반적으로 현재일 기준으로 1개월 이후의 배차정보가 입력되어 운영되고 있습니다.</span></li>
+									<li><span>“조회 가능한 내역이 없습니다.”라고 나오면 출발지 터미널로 문의하시기 바랍니다.</span></li>
+								</ul>
+
+								<!--dl class="radius_type1 mt20">
+									<dt>운행정보가 없는 노선의 경우 아래 사이트를 참조하세요. </dt>
+									<dd>
+										<ul>
+											<li><a href="http://www.busterminal.or.kr" target="_blank" title="새창">www.busterminal.or.kr</a></li>
+										</ul>
+									</dd>
+								</dl-->
+							</div>
+						</div>
+					</div>
+				</div><!-- // cont_wrap -->
+
+				<div class="layer_popup_area terminal_select" data-layer-name="terminal_select01">
+					<span class="dimd"></span>
+					<div class="layer_content">
+						<div class="layer_header">
+							<h2>터미널 선택</h2>
+							<a href="#" class="close"><img src="/images/btn/layer_map_close.png" alt="터미널선택 레이어 닫기"></a>
+						</div>
+						<div class="layer_body">
+							<div class="body_select_wrap">
+								<div class="body_select">
+									<dl>
+										<dt>지역선택</dt>
+										<dd>
+											<div class="select_type1 select_w4 area01" data-select="select">
+												<p class="default"><a href="#" id="areaNm01">전체</a></p>
+												<ul id="areaUl01">
+													<li data-value="%"><a href="#">전체</a></li>
+													<li data-value="01"><a href="#">특별/광역/자치</a></li>
+													<li data-value="02"><a href="#">강원도</a></li>
+													<li data-value="03"><a href="#">경기도</a></li>
+													<li data-value="04"><a href="#">경상남도</a></li>
+													<li data-value="05"><a href="#">경상북도</a></li>
+													<li data-value="06"><a href="#">전라남도</a></li>
+													<li data-value="07"><a href="#">전라북도</a></li>
+													<li data-value="08"><a href="#">충청남도</a></li>
+													<li data-value="09"><a href="#">충청북도</a></li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+									<dl>
+										<dt><label for="areaText01">터미널명</label></dt>
+										<dd>
+											<div class="search trml_list">
+												<input type="text" class="input_w12" id="areaText01" onkeypress="if(event.keyCode==13){readTrmlList('01');} return false;" style="width: 97%; margin-left: 0; padding-left: 3%;" >
+												<a href="#" id="searchTrml01" onclick="readTrmlList('01'); return false;"><span>출발지 선택</span></a>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+
+							<div class="select_detail main_depart">
+								<strong class="terminal_sel_pop_tit">주요 출발지</strong>
+								<ul id="special_areaList01" class="mgb_5">
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','동서울','0511601'); return false;"><span>동서울</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','원주','2638201'); return false;"><span>원주</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','인천공항1터미널','2238201'); return false;"><span>인천공항1터미널</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','인천공항2터미널','2238202'); return false;"><span>인천공항2터미널</span></a></li>
+								</ul>
+								<ul id="special_areaList01" class="mgb_5">
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','서울남부','0671801'); return false;"><span>서울남부</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','대전복합','3455101'); return false;"><span>대전복합</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','성남','1349701'); return false;"><span>성남</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','수원','1658501'); return false;"><span>수원</span></a></li>
+								</ul>
+								<ul id="special_areaList01" class="mgb_15">
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','안산','1529901'); return false;"><span>안산</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','대구서부','4248201'); return false;"><span>대구서부</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','천안','3112001'); return false;"><span>천안</span></a></li>
+									<li class="case"><a href="#" onclick="addTrmlInfo('01','청주','2839701'); return false;"><span>청주</span></a></li>
+								</ul>
+								<strong class="terminal_sel_pop_tit">출발지 선택</strong>
+								<div class="scroller layout_type01"  data-ui-type="design_scrollbar">
+									<ul id="areaList01">
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- // layer_popup_area -->
+				
+				<div class="layer_popup_area terminal_select" data-layer-name="terminal_select02">
+					<span class="dimd"></span>
+					<div class="layer_content">
+						<div class="layer_header">
+							<h2>터미널 선택</h2>
+							<a href="#" class="close"><img src="/images/btn/layer_map_close.png" alt="터미널선택 레이어 닫기"></a>
+						</div>
+						<div class="layer_body">
+							<div class="body_select_wrap">
+								<div class="body_select">
+									<dl>
+										<dt>지역선택</dt>
+										<dd>
+											<div class="select_type1 select_w4 area02" data-select="select">
+												<p class="default"><a href="#" id="areaNm02">전체</a></p>
+												<ul id="areaUl02">
+													<li data-value="%"><a href="#">전체</a></li>
+													<li data-value="01"><a href="#">특별/광역/자치</a></li>
+													<li data-value="02"><a href="#">강원도</a></li>
+													<li data-value="03"><a href="#">경기도</a></li>
+													<li data-value="04"><a href="#">경상남도</a></li>
+													<li data-value="05"><a href="#">경상북도</a></li>
+													<li data-value="06"><a href="#">전라남도</a></li>
+													<li data-value="07"><a href="#">전라북도</a></li>
+													<li data-value="08"><a href="#">충청남도</a></li>
+													<li data-value="09"><a href="#">충청북도</a></li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+									<dl>
+										<dt><label for="areaText02">터미널명</label></dt>
+										<dd>
+											<div class="search trml_list">
+												<input type="text" class="input_w6" id="areaText02" onkeypress="if(event.keyCode==13){readTrmlList('02');} return false;" style="width: 97%; margin-left: 0; padding-left: 3%;" />
+												<a href="#" id="searchTrml02" onclick="readTrmlList('02'); return false;"><span>출발지 선택</span></a>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+
+							<div class="select_detail main_depart">
+								<strong class="terminal_sel_pop_tit">도착지 선택</strong>
+								<div class="scroller type2"  data-ui-type="design_scrollbar">
+									<ul id="areaList02">
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- // layer_popup_area -->
+			</section>
+		</article>
+		
+		<hr />
+
+	<script type="text/javascript" src="/js/tckmrs/readTrmlList.js"></script>
+	<script type="text/javascript" src="/js/runinf/runInf.js"></script>
+	<script type="text/javascript" src="/js/runinf/runInfMessage.js"></script>
+	<script type="text/javascript"></script>
+
+		<!--  -->	
+
+		<hr />
+
+		<footer id="footer">
+			<div class="sub_menu_wrap">
+				<div class="sub_menu" role="navigation" aria-label="하단 메뉴바">
+					<div class="device">
+						<dl>
+							<dt><a href='/otck/trmlInfEnty.do'>시외버스 예매</a></dt>
+							<dd><a href='/otck/trmlInfEnty.do'>승차권 예매</a></dd>
+							<dd><a href='/mrs/cardNumEnty.do'>예매조회/취소/변경</a></dd>
+							<dd><a href='/recp/recpEnty.do'>영수증 발행</a></dd>
+						</dl>
+					</div>
+					<div class="device">
+						<dl>
+							<dt><a href='/runinf/runInf.do'>운행정보</a></dt>
+							<dd><a href='/runinf/runInf.do'>노선/운행정보</a></dd>
+						</dl>
+					</div>
+					<div class="device">
+						<dl>
+							<dt><a href='/useinf/mrsInfo.do'>이용안내</a></dt>
+							<dd><a href='/useinf/mrsInfo.do'>승차권 예매 안내</a></dd>
+							<!--2016-07-06 <dd><a href='/useinf/disCntInf.do'>할인제도 안내</a></dd> -->
+							<dd><a href='/useinf/cancInf.do'>예매 변경 및 취소 안내</a></dd>
+							<dd><a href='/useinf/mobileInf.do'>모바일 이용안내</a></dd>
+							<dd><a href='/useinf/trmlInf.do'>터미널 및 운수사 안내</a></dd>
+							<dd><a href='/useinf/cashReceipt.do'>현금영수증 안내</a></dd>
+						</dl>
+					</div>
+					<div class="device">
+						<dl>
+							<dt><a href='/support/notice.do'>고객지원</a></dt>
+							<dd><a href='/support/notice.do'>공지사항</a></dd>
+							<dd><a href='/support/faq.do'>FAQ</a></dd>
+							<dd><a href='/support/question.do'>고객의 소리</a></dd>
+						</dl>
+					</div>
+				</div>
+			</div><!-- // sub_menu_wrap -->
+
+			<div class="footer_menu_wrap">
+				<div class="footer_menu" role="navigation" aria-label="푸터 메뉴바">
+					<ul class="pc_ver">
+						<li><a href='/usesite/term.do'>이용약관</a></li>
+						<li style="font-weight:900; text-decoration:underline; color:#ffffff;"><a href='/usesite/privateInf.do'>개인정보처리방침</a></li>
+						<li><a href='/usesite/rejectEmail.do'>이메일무단수집거부</a></li>
+						<li><a href='/usesite/siteMap.do'>사이트맵</a></li>
+						<li><a href="https://www.tmoney.co.kr" target="_blank" title="티머니 - 새창 열림">티머니</a></li>
+					</ul>
+					<ul class="mobile_ver">
+						<li><a href="/usesite/term.do">이용약관</a></li>
+						<li style="font-weight:900; text-decoration:underline; color:#ffffff;"><a href="/usesite/privateInf.do">개인정보처리방침</a></li>
+						<li><a href="/usesite/rejectEmail.do">이메일무단수집거부</a></li>
+						<li><a href="/usesite/siteMap.do">사이트맵</a></li>
+						<li><a href="#" class="btn_intro_footer">티머니</a></li>
+					</ul>
+
+					<div class="information">
+						<address>
+							<span>서울특별시 중구 후암로 110 서울시티타워 12층</span>
+							<!--span>대표이사 최대성</span-->
+							<span>사업자등록번호 396-87-03587</span>
+						</address>
+						<p class="copyright">Copyright 2019 Tmoneymobility Co., Ltd. All rights reserved.</p>
+						<p class="info">
+							<span>고객센터 대표전화 <a href="tel:1644-3070">1644-3070</a>&nbsp; |&nbsp; 근무시간&nbsp; 평일 09:00~18:00 / 토,일, 법정공휴일 휴무</span>
+						</p>
+					</div><!-- // information -->
+
+					<div class="accessibility_mark">
+						<a title="새창 열림" href="http://www.wa.or.kr/board/list.asp?BoardID=0006" target="_blank">
+							<img class="wa" alt="(사)한국장애인단체총연합회 한국웹접근성인증평가원 웹 접근성 우수사이트 인증마크(WA인증마크)" src="/images/img/wa_mark_2024.png" />
+						</a>
+					</div>
+				</div>
+			</div><!-- // footer_menu_wrap -->
+		</footer>
+	</div><!-- // wrapper -->
+
+<script>
+/*
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-91313211-1', 'auto');
+  ga('send', 'pageview');
+*/
+</script>
+
+<!-- 웹홍보가이드 시작 -->
+<link rel="stylesheet" type="text/css" href="/ksccinfo/css/aeb_common_02.css" />
+<!-- // 웹 홍보가이드 js -->
+<script type="text/javascript" src="/ksccinfo/js/jquery.introUI_02.js"></script>
+<!-- // 웹 홍보가이드 끝-->
+
+<!-- =============================================================================== -->
+<!-- 웹접근성 참조 추가 - start -->
+<script type="text/javascript" src="/accessibility/accessibility.js"></script>
+<script type="text/javascript" src="/accessibility/accessibility_func.js"></script>
+<script type="text/javascript" src="/accessibility/accessibility_dom.js"></script>
+<script type="text/javascript" src="/accessibility/accessibility_obj.js"></script>
+<script type="text/javascript" src="/accessibility/accessibility_page.js"></script>
+<script type="text/javascript" src="/accessibility/accessibility_mobile.js"></script>
+<!-- :: 웹접근성 참조 추가 - end -->
+<!-- =============================================================================== -->
+
+</body>
+</html>
