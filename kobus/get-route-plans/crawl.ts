@@ -23,19 +23,20 @@ export async function fetchKobusPlans(
             })
 
             // Get "#deprDtm" hidden input value
-            const hiddenInputValue = (await page.evaluate(
+            const serverDateYYYYMMDD = (await page.evaluate(
                 `document.querySelector("#deprDtm").value`,
             )) as string
 
-            const yyyy = hiddenInputValue.slice(0, 4)
-            const mm = hiddenInputValue.slice(4, 6)
-            const dd = hiddenInputValue.slice(6, 8)
+            const yyyy = serverDateYYYYMMDD.slice(0, 4)
+            const mm = serverDateYYYYMMDD.slice(4, 6)
+            const dd = serverDateYYYYMMDD.slice(6, 8)
 
             date.setFullYear(parseInt(yyyy))
             date.setMonth(parseInt(mm) - 1)
             date.setDate(parseInt(dd) + 1)
 
-            console.log(`기준일: ${hiddenInputValue}`)
+            console.log(`기준일: ${serverDateYYYYMMDD}`)
+            console.log(`탐색 시작: ${formatLocalDate(date)}`)
 
             // Set departure and arrival terminals
             await page.evaluate(
@@ -53,10 +54,7 @@ document.querySelector('#prmmDcYn').value = 'N'
             )
 
             for (let i = 0; i < 14; i++) {
-                const yyyymmdd = date
-                    .toISOString()
-                    .slice(0, 10)
-                    .replaceAll('-', '')
+                const yyyymmdd = formatLocalDate(date)
                 console.log(`${i + 1} / 14: ${yyyymmdd}`)
                 await page.evaluate(
                     `
@@ -74,4 +72,12 @@ document.querySelector("#alcnSrchBtn").children[0].click()`,
     })
 
     return rawResult
+}
+
+function formatLocalDate(date: Date): string {
+    return [
+        date.getFullYear(),
+        (date.getMonth() + 1).toString().padStart(2, '0'),
+        date.getDate().toString().padStart(2, '0'),
+    ].join('')
 }
