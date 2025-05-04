@@ -1,7 +1,18 @@
+import { getPlansFromRoute } from './tmoney/get-plans-from-route/index.ts'
 import { getRoutesFromTerminals } from './tmoney/get-routes-from-terminals.ts'
-import { getTerminals } from './tmoney/get-terminals.ts'
+import { getDepartingTerminals } from './tmoney/get-terminals.ts'
 
-const terminals = await getTerminals()
-const routes = await getRoutesFromTerminals(terminals[100].id)
+const departingTerminals = await getDepartingTerminals()
+const departingTerminal = departingTerminals.get('t-2401401')!
 
-console.log(terminals[100], routes)
+const routes = await getRoutesFromTerminals(departingTerminal.id)
+const arrivalTerminal = routes.values().drop(3).next().value!
+
+console.log('-----')
+
+console.log(
+    `Departure Terminal: ${departingTerminal.name}(${departingTerminal.id})`,
+)
+console.log(`Arrival Terminal: ${arrivalTerminal.name}(${arrivalTerminal.id})`)
+
+const plans = await getPlansFromRoute(departingTerminal, arrivalTerminal)

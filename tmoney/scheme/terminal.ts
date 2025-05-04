@@ -89,7 +89,7 @@ import { PREFIX } from '../../const.ts'
 
 // 의미 없는 필드들은 삭제하고, 실제 값이 있는 필드들만 남겨야 함
 
-export const rawTmoneyTerminalScheme = z
+export const rawTmoneyTerminalParser = z
     .object({
         trml_Cd: numericString,
         trml_Nm: z.string(),
@@ -101,3 +101,4 @@ export const rawTmoneyTerminalScheme = z
         name: d.trml_Nm,
         area: d.cty_Bus_Area_Cd,
     }))
+    .array()

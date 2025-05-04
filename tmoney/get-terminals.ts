@@ -1,11 +1,12 @@
 import { cachedFetch } from '../common/cached-fetch.ts'
 import saveData from '../common/save-data.ts'
-import { rawTmoneyTerminalScheme } from './scheme/terminal.ts'
+import { Terminal } from '../common/scheme/terminal.ts'
+import { rawTmoneyTerminalParser } from './scheme/terminal.ts'
 
 const CACHE_NAME = 'tmoney-terminals.json'
 const TERMINAL_JSON_URL = 'https://txbus.t-money.co.kr/otck/readTrmlList.do'
 
-export async function getTerminals() {
+export async function getDepartingTerminals() {
     const formData = new FormData()
 
     formData.append('cty_Bus_Area_Cd', '')
@@ -24,8 +25,12 @@ export async function getTerminals() {
         }),
     )
 
-    const terminals = rawTmoneyTerminalScheme.array().parse(rawTerminals)
+    const terminals = rawTmoneyTerminalParser.parse(rawTerminals)
     await saveData('tmoney', 'terminals', JSON.stringify(terminals, null, 2))
 
-    return terminals
+    const terminalMap = new Map<string, Terminal>(
+        terminals.map((terminal) => [terminal.id, terminal]),
+    )
+
+    return terminalMap
 }

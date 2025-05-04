@@ -1,7 +1,8 @@
 import { cachedFetch } from '../common/cached-fetch.ts'
 import saveData from '../common/save-data.ts'
+import { Terminal } from '../common/scheme/terminal.ts'
 import { PREFIX } from '../const.ts'
-import { rawTmoneyTerminalScheme } from './scheme/terminal.ts'
+import { rawTmoneyTerminalParser } from './scheme/terminal.ts'
 
 const API_URL = 'https://txbus.t-money.co.kr/otck/readTrmlList.do'
 
@@ -28,20 +29,17 @@ export async function getRoutesFromTerminals(terminalCode: string) {
         }),
     )
 
-    const targetTerminals = rawTmoneyTerminalScheme
-        .array()
-        .parse(rawTargetTerminals)
-
-    const routes = targetTerminals.map((terminal) => ({
-        departureTerminalId: terminalCode,
-        arrivalTerminalId: terminal.id,
-    }))
+    const targetTerminals = rawTmoneyTerminalParser.parse(rawTargetTerminals)
 
     await saveData(
         'tmoney',
-        `routes-from-${terminalCode}`,
-        JSON.stringify(routes, null, 2),
+        `target-terminals-from-${terminalCode}`,
+        JSON.stringify(targetTerminals, null, 2),
     )
 
-    return routes
+    const targetTerminalMap = new Map<string, Terminal>(
+        targetTerminals.map((terminal) => [terminal.id, terminal]),
+    )
+
+    return targetTerminalMap
 }

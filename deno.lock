@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@debutter/dom@~0.3.2": "0.3.2",
     "jsr:@roka/git@~0.3.1": "0.3.1",
     "jsr:@std/assert@^1.0.11": "1.0.13",
     "jsr:@std/collections@^1.0.10": "1.0.11",
@@ -11,6 +12,9 @@
     "npm:zod@^3.24.2": "3.24.2"
   },
   "jsr": {
+    "@debutter/dom@0.3.2": {
+      "integrity": "f17230ef6d88eac39cef505baa3eb6f44a120822bd0abd8d41149650565ae5da"
+    },
     "@roka/git@0.3.1": {
       "integrity": "1164a562216c03c3075d8901728edc393333598737fd163c8fe8b92d463c2e8c",
       "dependencies": [
@@ -475,12 +479,18 @@
       "integrity": "sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ=="
     }
   },
+  "redirects": {
+    "https://esm.sh/jsr/@debutter/dom": "https://esm.sh/jsr/@debutter/dom@0.3.2"
+  },
   "remote": {
+    "https://esm.sh/@jsr/debutter__dom@0.3.2/denonext/debutter__dom.mjs": "f6a74af048d9567fa17ccf59ba8b76944f01eeccb91335ce8ce47dfb08b2e51c",
+    "https://esm.sh/jsr/@debutter/dom@0.3.2": "949a8a5f30c33e98a23f8f0993e2c29f6759478cef214117985377bb91a427da",
     "https://esm.sh/zod@3.22.4": "58f997d2fb4d837fdccc359937cfa92ec0c2870fcda1e58fa52eadd998b06dd1",
     "https://esm.sh/zod@3.22.4/denonext/zod.mjs": "2302c597fb6b5342e5f56ece83f759f82383376d7eca8d00eb56c41d2a65fb5b"
   },
   "workspace": {
     "dependencies": [
+      "jsr:@debutter/dom@~0.3.2",
       "jsr:@roka/git@~0.3.1",
       "npm:puppeteer-core@^24.6.1",
       "npm:zod@^3.24.2"
