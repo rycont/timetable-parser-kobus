@@ -18,7 +18,7 @@ const rawTerminalScheme = z
     .object({
         TERMINAL_NM: z.string(),
         TERMINAL_ID: z.string(),
-        V_AREA: z.string(),
+        V_AREA: z.string().optional(),
     })
     .transform((terminal) => ({
         name: terminal.TERMINAL_NM,
