@@ -25,10 +25,8 @@ export async function cachedCrawl({
         console.log('Cache found, using cached data...')
         return JSON.parse(cache) as string[]
     } catch (e) {
-        if (e instanceof Deno.errors.NotFound) {
-            console.log(`Cache not found for ${fileName}, fetching...`)
-        } else {
-            console.error(`Error reading cache: ${e}`)
+        if (!(e instanceof Deno.errors.NotFound)) {
+            throw e
         }
 
         // The rest of your script remains the same.

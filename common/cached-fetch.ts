@@ -10,12 +10,10 @@ export async function cachedFetch(
 
     try {
         const cache = await Deno.readTextFile(cacheFilePath)
-        console.log('Cache found, using cached data...')
+        console.log('Cache hit')
         return cache as string
     } catch (e) {
-        if (e instanceof Deno.errors.NotFound) {
-            console.log(`Cache not found for ${filename}, fetching...`)
-        } else {
+        if (!(e instanceof Deno.errors.NotFound)) {
             throw e
         }
     }
