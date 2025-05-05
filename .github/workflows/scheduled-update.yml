@@ -43,12 +43,27 @@ jobs:
             - name: Set up submodule push URL with token
               run: |
                   git config --global url."https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-                  git submodule foreach 'git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-kobus.git'
+
+                  cd kobus-output
+                  git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-kobus.git
+                    
+                  cd ../bustago-output
+                  git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-bustago.git
+
+                  # 원래 디렉토리로 복귀
+                  cd ..
 
             - name: Install Deno
               uses: denoland/setup-deno@v1
               with:
                   deno-version: v2.x
+
+            - name: Switch submodules to main branch
+              run: |
+                  cd kobus-output
+                  git switch main
+                  cd ../bustago-output
+                  git switch main
 
             - uses: browser-actions/setup-chrome@v1
               id: setup-chrome
@@ -63,3 +78,18 @@ jobs:
               env:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
                   UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 16 }}
+
+            - name: Push to GitHub
+              run: |
+                  cd kobus-output
+                  git add -A
+                  git commit -m "Regular Data Update(Kobus)"
+                  git push origin
+                  cd ../bustago-output
+                  git add -A
+                  git commit -m "Regular Data Update(Bustago)"
+                  git push origin
+                  cd ..
+                  git add -A
+                  git commit -m "Regular Data Update(Workspace)"
+                  git push origin

@@ -1,5 +1,3 @@
-import { git } from '@roka/git'
-
 import { closeBrowser } from './common/cached-crawl.ts'
 
 import { getRoutePlans as getKobusRoutePlans } from './kobus/get-route-plans/index.ts'
@@ -69,46 +67,7 @@ async function updateBustago() {
     }
 }
 
-await git({ cwd: "kobus-output" }).branches.checkout({
-    target: 'main',
-})
-
-await git({ cwd: "bustago-output" }).branches.checkout({
-    target: 'main',
-})
-
 await Promise.all([updateKobus(), updateBustago()])
 
 await removeOldCaches()
 
-async function pushAll(directory: string) {
-    const gitModule = git({
-        cwd: directory,
-    })
-
-    const status = await gitModule.index.status()
-
-    const dirtyFiles = [...status.unstaged, ...status.untracked].map(
-        (d) => d.path,
-    )
-
-    if (dirtyFiles.length === 0) {
-        console.log('No changes to commit')
-        return
-    }
-
-    console.log('Dirty files:')
-    console.log(dirtyFiles.join('\n'))
-
-    await gitModule.index.add(dirtyFiles)
-
-    await gitModule.commits.create('Regular Data Update', {
-        all: true,
-    })
-    await gitModule.commits.push()
-    console.log(directory, 'Pushed to GitHub!')
-}
-
-await pushAll('kobus-output')
-await pushAll('bustago-output')
-await pushAll('.')
