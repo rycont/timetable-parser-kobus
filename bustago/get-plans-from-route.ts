@@ -1,4 +1,3 @@
-import { determineVariant } from '../common/determine-variant.ts'
 import { mergePlans } from '../common/merge-plans.ts'
 import saveData from '../common/save-data.ts'
 import {
@@ -7,6 +6,8 @@ import {
 } from '../common/scheme/operation.ts'
 import getPlansFromRouteInSpecificDate from './get-plans-from-route-specific-date.ts'
 import { RawOperation } from './scheme/operation.ts'
+
+const PARSING_WINDOW_SIZE = 14
 
 export async function getPlansFromRoute(
     departureTerminalId: string,
@@ -22,7 +23,7 @@ export async function getPlansFromRoute(
 
     const plansByPlanKey: Map<string, RawOperation[]> = new Map()
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < PARSING_WINDOW_SIZE; i++) {
         date.setDate(date.getDate() + 1)
 
         const plans = await getPlansFromRouteInSpecificDate(
@@ -100,21 +101,19 @@ function rawOperationToPlannedOperation(data: RawOperation) {
 }
 
 function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
-    const today = new Date()
-
-    const operatingDates = [
-        ...new Set(
-            plans
-                .flatMap((plan) => plan.DATE_ARRAY.split(','))
-                .map((date) => date.split(' ')[0]),
-        ),
-    ]
+    const operatingDates = plans
+        .map(
+            (plan) =>
+                `${plan.DEP_DATE.slice(0, 4)}-${plan.DEP_DATE.slice(
+                    4,
+                    6,
+                )}-${plan.DEP_DATE.slice(6, 8)}`,
+        )
         .map((date) => new Date(date))
-        .filter((date) => today < date)
 
-    const parsingWindow = plans[0].BUS_ORDER_CREATE_DAYS
+    const uploadedAmount = plans[0].BUS_ORDER_CREATE_DAYS
 
-    if (operatingDates.length === parsingWindow) {
+    if (operatingDates.length === PARSING_WINDOW_SIZE) {
         return {
             type: 'everyday',
         }
@@ -132,25 +131,50 @@ function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
         .slice(1)
 
     const uniqueIntervals = [...new Set(intervals)]
+
     if (uniqueIntervals.length === 1 && uniqueIntervals[0] === 2) {
         return {
             type: 'even-odd',
         }
     }
 
+    if (uniqueIntervals[0] === 1 && operatingDates.length >= 6) {
+        return {
+            type: 'everyday',
+        }
+    }
+
+    if (uploadedAmount < 8) {
+        return {
+            type: 'unknown',
+        }
+    }
+
     if (uniqueIntervals.length === 1) {
         console.log('Another type of interval has appeared!', uniqueIntervals)
+        console.log(operatingDates)
+        console.log(plans[0])
         throw new Error('Another type of interval has appeared!')
     }
 
-    if (parsingWindow === 14) {
-        return determineVariant(
-            operatingDates.map((date) => date.toISOString().slice(0, 10)),
-            parsingWindow,
-        )
+    const operationPerDays = Object.groupBy(
+        operatingDates.map((date) => date.getDay() || 7),
+        (date) => date,
+    )
+
+    const onceDays = operationPerDays['1']?.toSorted() || []
+    const twiceDays = operationPerDays['2']?.toSorted() || []
+
+    if (twiceDays.length !== 0) {
+        return {
+            type: 'irregular',
+            fixedDays: twiceDays,
+            irregularDays: onceDays,
+        }
     }
 
     return {
-        type: 'unknown',
+        type: 'specific-day',
+        days: onceDays,
     }
 }
