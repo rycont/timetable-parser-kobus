@@ -1,4 +1,4 @@
-import { OperatingPattern } from '../types/plan-raw.ts'
+import { OperatingPattern } from './scheme/operation.ts'
 
 export function determineVariant(
     operatedDatesString: string[],

@@ -30,6 +30,10 @@ export async function cachedFetch(
     // Save the content to the cache.
     await Deno.mkdir(CACHE_DIR, { recursive: true })
     await Deno.writeTextFile(cacheFilePath, data)
+
     console.log(`Data cached to ${cacheFilePath}`)
+
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     return data
 }

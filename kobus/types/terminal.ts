@@ -1,11 +1,6 @@
 import { z } from 'zod'
 import { numericString } from '../../common/scheme.ts'
-
-export const routeScheme = z.object({
-    departureTerminalId: numericString,
-    arrivalTerminalId: numericString,
-    durationInMinutes: z.number(),
-})
+import { routeScheme } from "../../common/scheme/operation.ts";
 
 export const transferRouteScheme = routeScheme.extend({
     transferTerminalId: numericString,

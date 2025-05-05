@@ -15,7 +15,7 @@ export async function getRoutesFromTerminals(terminalCode: string) {
 
     const CACHE_NAME = `tmoney-route-from-${terminalCode}.json`
 
-    const formData = new FormData()
+    const formData = new URLSearchParams()
 
     formData.append('cty_Bus_Area_Cd', '')
     formData.append('trml_Nm', '')

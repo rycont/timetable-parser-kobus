@@ -1,11 +1,9 @@
 import saveData from '../../common/save-data.ts'
-import {
-    normalizedPlanScheme,
-    rawPlanListResponseScheme,
-} from '../types/plan-raw.ts'
-import { Terminal } from '../types/terminal.ts'
+import { rawPlanListResponseScheme } from '../types/plan-raw.ts'
 import { fetchKobusPlans } from './crawl.ts'
-import { mergePlans } from './merge-plans.ts'
+import { mergePlans } from '../../common/merge-plans.ts'
+import { Terminal } from '../../common/scheme/terminal.ts'
+import { normalizedPlanScheme } from '../../common/scheme/operation.ts'
 
 export async function getRoutePlans(
     departureTerminal: Terminal,

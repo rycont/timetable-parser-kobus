@@ -7,7 +7,7 @@ const CACHE_NAME = 'tmoney-terminals.json'
 const TERMINAL_JSON_URL = 'https://txbus.t-money.co.kr/otck/readTrmlList.do'
 
 export async function getDepartingTerminals() {
-    const formData = new FormData()
+    const formData = new URLSearchParams()
 
     formData.append('cty_Bus_Area_Cd', '')
     formData.append('trml_Nm', '')

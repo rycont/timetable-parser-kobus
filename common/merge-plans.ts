@@ -1,9 +1,9 @@
+import { determineVariant } from './determine-variant.ts'
 import {
     PlannedOperation,
     NormalizedPlan,
     normalizedPlanScheme,
-} from '../types/plan-raw.ts'
-import { determineVariant } from './determine-variant.ts'
+} from './scheme/operation.ts'
 
 export function mergePlans(
     plans: PlannedOperation[],

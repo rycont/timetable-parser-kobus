@@ -6,74 +6,7 @@ import {
     ynEnum,
     yyyymmddScheme,
 } from '../../common/scheme.ts'
-import { routeScheme } from './terminal.ts'
-
-export const plannedOperationScheme = routeScheme.extend({
-    operator: z.string(),
-    busClass: z.string(),
-    departureTime: timeScheme,
-    isTemporaryRoute: z.boolean(),
-    seatsAmount: z.number(),
-    date: yyyymmddScheme,
-    fare: z.object({
-        어른: z.number(),
-        초등생: z.number(),
-        중고생: z.number(),
-    }),
-})
-
-// NormalizedPlan은 특정 일자가 아닌, 일반적인 운행 패턴을 담고 있는 스키마입니다.
-// 그렇기에 date 필드는 포함되어 있지 않습니다.
-
-export const operatingPatternScheme = z.union([
-    z.object({
-        type: z.literal('everyday'),
-    }),
-    z.object({
-        type: z.literal('even-odd'),
-    }),
-    z.object({
-        type: z.literal('specific-day'),
-        days: z.array(z.number().max(7).min(1)),
-    }),
-    z
-        .object({
-            type: z.literal('irregular'),
-            fixedDays: z.array(z.number().max(7).min(1)),
-            irregularDays: z.array(z.number().max(7).min(1)),
-        })
-        .refine(
-            (data) =>
-                data.fixedDays?.length !== 0 ||
-                data.irregularDays?.length !== 0,
-            {
-                message: 'fixedDays or irregularDays must be provided',
-            },
-        ),
-])
-
-export type OperatingPattern = z.infer<typeof operatingPatternScheme>
-
-export const normalizedPlanScheme = plannedOperationScheme
-    .omit({
-        date: true,
-    })
-    .extend({
-        pattern: operatingPatternScheme,
-        operator: z.string().array(),
-        busClass: z.string().array(),
-        seatsAmount: z.number().array(),
-        fare: z.object({
-            어른: z.number().array(),
-            초등생: z.number().array(),
-            중고생: z.number().array(),
-        }),
-        durationInMinutes: z.number().array(),
-    })
-
-export type NormalizedPlan = z.infer<typeof normalizedPlanScheme>
-
-export type PlannedOperation = z.infer<typeof plannedOperationScheme>
+import { PlannedOperation, plannedOperationScheme } from '../../common/scheme/operation.ts'
 
 export const rawPlanScheme = z.object({
     RMN_SATS_NUM: stringToNumber,

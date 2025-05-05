@@ -1,3 +1,6 @@
 [submodule "kobus-output"]
 	path = kobus-output
 	url = https://github.com/rycont/operation-plan-kobus
+[submodule "bustago-output"]
+	path = bustago-output
+	url = https://github.com/rycont/operation-plan-bustago

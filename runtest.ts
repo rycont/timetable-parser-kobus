@@ -1,18 +1,22 @@
-import { getPlansFromRoute } from './tmoney/get-plans-from-route/index.ts'
-import { getRoutesFromTerminals } from './tmoney/get-routes-from-terminals.ts'
-import { getDepartingTerminals } from './tmoney/get-terminals.ts'
+import { getPlansFromRoute } from './bustago/get-plans-from-route.ts'
+import { getRoutesFromTerminal } from './bustago/get-routes-from-terminal.ts'
+import { getTerminals } from './bustago/get-terminals.ts'
 
-const departingTerminals = await getDepartingTerminals()
-const departingTerminal = departingTerminals.get('t-2401401')!
+const terminals = await getTerminals()
+const departingTerminal = [...terminals.values()][10]
 
-const routes = await getRoutesFromTerminals(departingTerminal.id)
-const arrivalTerminal = routes.values().drop(3).next().value!
+const routes = await getRoutesFromTerminal(departingTerminal.id)
 
-console.log('-----')
-
-console.log(
-    `Departure Terminal: ${departingTerminal.name}(${departingTerminal.id})`,
-)
-console.log(`Arrival Terminal: ${arrivalTerminal.name}(${arrivalTerminal.id})`)
-
-const plans = await getPlansFromRoute(departingTerminal, arrivalTerminal)
+for (const arrivalTerminal of routes) {
+    console.log('-----')
+    console.log(
+        `Departure Terminal: ${departingTerminal.name}(${departingTerminal.id})`,
+    )
+    console.log(
+        `Arrival Terminal: ${arrivalTerminal.name}(${arrivalTerminal.id})`,
+    )
+    console.log('-----')
+    console.log(
+        await getPlansFromRoute(departingTerminal.id, arrivalTerminal.id),
+    )
+}
