@@ -1,7 +1,8 @@
 import { cachedCrawl } from '../common/cached-crawl.ts'
 import saveData from '../common/save-data.ts'
+import { Terminal } from "../common/scheme/terminal.ts";
 import { rawRouteResponseScheme } from './types/terminal-raw.ts'
-import { Route, Terminal } from './types/terminal.ts'
+import { Route } from './types/terminal.ts'
 
 export async function getTerminals() {
     const [routesRawString] = await cachedCrawl({

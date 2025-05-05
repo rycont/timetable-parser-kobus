@@ -1,3 +1,5 @@
+import { tqdm } from '@thesephist/tsqdm'
+
 import { cachedCrawl } from '../../common/cached-crawl.ts'
 import { formatLocalDate } from '../../common/format-local-date.ts'
 import { Terminal } from '../../common/scheme/terminal.ts'
@@ -53,9 +55,12 @@ document.querySelector('#prmmDcYn').value = 'N'
 `,
             )
 
-            for (let i = 0; i < 14; i++) {
+            const range = Array(14)
+                .fill(0)
+                .map((_, i) => i)
+
+            for await (const i of tqdm(range)) {
                 const yyyymmdd = formatLocalDate(date)
-                console.log(`${i + 1} / 14: ${yyyymmdd}`)
                 await page.evaluate(
                     `
 document.querySelector('#alcnSrchBtn .btn_confirm').classList.remove('ready')

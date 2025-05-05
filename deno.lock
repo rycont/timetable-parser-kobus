@@ -15,6 +15,7 @@
     "jsr:@std/path@0.213.1": "0.213.1",
     "jsr:@std/path@^1.0.8": "1.0.9",
     "jsr:@std/path@~0.213.1": "0.213.1",
+    "npm:@thesephist/tsqdm@~0.1.1": "0.1.1",
     "npm:@types/node@*": "22.12.0",
     "npm:puppeteer-core@^24.6.1": "24.6.1_devtools-protocol@0.0.1425554",
     "npm:zod@^3.24.2": "3.24.2"
@@ -94,6 +95,9 @@
         "yargs"
       ],
       "bin": true
+    },
+    "@thesephist/tsqdm@0.1.1": {
+      "integrity": "sha512-nCGURUO5etEx+2W5A3kD6RqNY4RfwFbGMem16p9wsVkORHHuO6QOGqHJ7l+K5tL/F0XTjq7xsbiawZi2D7G8TA=="
     },
     "@tootallnate/quickjs-emscripten@0.23.0": {
       "integrity": "sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA=="
@@ -534,6 +538,7 @@
     "dependencies": [
       "jsr:@b-fuze/deno-dom@~0.1.49",
       "jsr:@roka/git@~0.3.1",
+      "npm:@thesephist/tsqdm@~0.1.1",
       "npm:puppeteer-core@^24.6.1",
       "npm:zod@^3.24.2"
     ]
