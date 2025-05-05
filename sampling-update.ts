@@ -59,7 +59,7 @@ async function updateBustago() {
                 departingTerminal.name,
                 arrivingTerminal.name,
                 progress++,
-                sampledRoutes.length,
+                sampledRoutes.length * randomTerminals.length,
             )
             await getBustagoPlansFromRoute(
                 departingTerminal.id,

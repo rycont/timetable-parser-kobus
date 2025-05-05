@@ -1,3 +1,4 @@
+import { tqdm } from '@thesephist/tsqdm'
 import { mergePlans } from '../common/merge-plans.ts'
 import saveData from '../common/save-data.ts'
 import {
@@ -23,7 +24,9 @@ export async function getPlansFromRoute(
 
     const plansByPlanKey: Map<string, RawOperation[]> = new Map()
 
-    for (let i = 0; i < PARSING_WINDOW_SIZE; i++) {
+    const iterations = Array(PARSING_WINDOW_SIZE).fill(0)
+
+    for await (const _ of tqdm(iterations)) {
         date.setDate(date.getDate() + 1)
 
         const plans = await getPlansFromRouteInSpecificDate(

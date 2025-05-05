@@ -22,7 +22,6 @@ export async function fetchKobusPlans(
                     setTimeout(resolve, 600 + Math.random() * 100),
                 )
                 await dialog.dismiss()
-                console.log('Dialog dismissed')
             })
 
             // Get "#deprDtm" hidden input value
@@ -59,7 +58,7 @@ document.querySelector('#prmmDcYn').value = 'N'
                 .fill(0)
                 .map((_, i) => i)
 
-            for await (const i of tqdm(range)) {
+            for await (const _ of tqdm(range)) {
                 const yyyymmdd = formatLocalDate(date)
                 await page.evaluate(
                     `
@@ -69,7 +68,7 @@ document.querySelector("#alcnSrchBtn").children[0].click()`,
                 )
 
                 // Wait for the results to load
-                const delay = 1000 + Math.floor(Math.random() * 1000)
+                const delay = 700 + Math.floor(Math.random() * 500)
                 await new Promise((resolve) => setTimeout(resolve, delay))
                 date.setDate(date.getDate() + 1)
             }
