@@ -69,6 +69,14 @@ async function updateBustago() {
     }
 }
 
+await git({ cwd: "kobus-output" }).branches.checkout({
+    target: 'main',
+})
+
+await git({ cwd: "bustago-output" }).branches.checkout({
+    target: 'main',
+})
+
 await Promise.all([updateKobus(), updateBustago()])
 
 await removeOldCaches()
@@ -76,10 +84,6 @@ await removeOldCaches()
 async function pushAll(directory: string) {
     const gitModule = git({
         cwd: directory,
-    })
-
-    await gitModule.branches.checkout({
-        target: 'main',
     })
 
     const status = await gitModule.index.status()
