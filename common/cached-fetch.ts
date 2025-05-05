@@ -29,7 +29,7 @@ export async function cachedFetch(
     await Deno.mkdir(CACHE_DIR, { recursive: true })
     await Deno.writeTextFile(cacheFilePath, data)
 
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 700))
 
     return data
 }
