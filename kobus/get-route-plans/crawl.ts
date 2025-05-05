@@ -38,7 +38,7 @@ export async function fetchKobusPlans(
             date.setMonth(parseInt(mm) - 1)
             date.setDate(parseInt(dd) + 1)
 
-            console.log(`기준일: ${serverDateYYYYMMDD}`)
+            console.log(`서버시간: ${serverDateYYYYMMDD}`)
 
             // Set departure and arrival terminals
             await page.evaluate(

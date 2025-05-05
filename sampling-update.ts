@@ -40,7 +40,6 @@ async function updateKobus() {
 }
 
 async function updateBustago() {
-    return
     const terminals = [...(await getBustagoTerminals()).values()]
     const randomTerminals = terminals
         .toSorted(() => Math.random() - 0.5)
