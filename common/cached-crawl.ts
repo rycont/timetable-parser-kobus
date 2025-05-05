@@ -22,7 +22,7 @@ export async function cachedCrawl({
     const cacheFilePath = createCacheFileName(fileName)
     try {
         const cache = await Deno.readTextFile(cacheFilePath)
-        console.log('Cache found, using cached data...')
+        console.log('Cache hit')
         return JSON.parse(cache) as string[]
     } catch (e) {
         if (!(e instanceof Deno.errors.NotFound)) {

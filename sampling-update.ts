@@ -54,16 +54,16 @@ async function updateBustago() {
         let progress = 1
 
         for (const arrivingTerminal of sampledRoutes) {
-            await getBustagoPlansFromRoute(
-                departingTerminal.id,
-                arrivingTerminal.id,
-            )
             console.log(
                 '[BUSTAGO] %s -> %s (%d / %d)',
                 departingTerminal.name,
                 arrivingTerminal.name,
                 progress++,
                 sampledRoutes.length,
+            )
+            await getBustagoPlansFromRoute(
+                departingTerminal.id,
+                arrivingTerminal.id,
             )
         }
     }
