@@ -3,7 +3,7 @@ import { numericString, timeScheme, yyyymmddScheme } from '../scheme.ts'
 
 export const routeScheme = z.object({
     departureTerminalId: z.string(),
-    arrivalTerminalId: numericString,
+    arrivalTerminalId: z.string(),
     durationInMinutes: z.number(),
 })
 

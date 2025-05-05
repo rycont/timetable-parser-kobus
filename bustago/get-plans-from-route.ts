@@ -95,7 +95,7 @@ function rawOperationToPlannedOperation(data: RawOperation) {
         isTemporaryRoute: false,
         departureTerminalId: data.sterCode,
         arrivalTerminalId: data.eterCode,
-        durationInMinutes: -1,
+        durationInMinutes: data.DIST_TIME,
     })
 }
 

@@ -18,6 +18,7 @@ export const rawOperationScheme = z
                 DATE_ARRAY: z.string(),
                 BUS_ROUTE_ID: z.string(),
                 BUS_ORDER_CREATE_DAYS: z.number(),
+                DIST_TIME: z.number(),
             }),
         ),
     })
