@@ -1,5 +1,3 @@
-console.log('Today:', new Date().toISOString().slice(0, 10))
-
 import { git } from '@roka/git'
 
 import { closeBrowser } from './common/cached-crawl.ts'
@@ -12,10 +10,10 @@ import { getTerminals as getBustagoTerminals } from './bustago/get-terminals.ts'
 import { getRoutesFromTerminal as getBustagoRoutesFromTerminal } from './bustago/get-routes-from-terminal.ts'
 import { getPlansFromRoute as getBustagoPlansFromRoute } from './bustago/get-plans-from-route.ts'
 
+const SAMPLES = parseInt(Deno.env.get('UPDATE_SAMPLES') ?? '20', 10)
+
 async function updateKobus() {
     const { routes, terminals } = await getKobusTerminals()
-
-    const SAMPLES = parseInt(Deno.env.get('UPDATE_SAMPLES') ?? '20', 10)
     const sampledRoutes = routes
         .toSorted(() => Math.random() - 0.5)
         .slice(0, SAMPLES)
@@ -45,13 +43,13 @@ async function updateBustago() {
     const terminals = [...(await getBustagoTerminals()).values()]
     const randomTerminals = terminals
         .toSorted(() => Math.random() - 0.5)
-        .slice(0, 2)
+        .slice(0, 4)
 
     for (const departingTerminal of randomTerminals) {
         const routes = await getBustagoRoutesFromTerminal(departingTerminal.id)
         const sampledRoutes = routes
             .toSorted(() => Math.random() - 0.5)
-            .slice(0, 10)
+            .slice(0, SAMPLES / 4)
 
         let progress = 1
 

@@ -39,10 +39,8 @@ export async function cachedCrawl({
         const responseContents: string[] = []
 
         const responsePromise = new Promise<void>((resolve) => {
-            console.log('Waiting for response...')
             page.on('response', async (response) => {
                 if (response.url().includes(targetUri)) {
-                    console.log('Catched!')
                     const content = await response.text()
                     responseContents.push(content)
                     resolve()
@@ -50,14 +48,11 @@ export async function cachedCrawl({
             })
         })
 
-        console.log(`Navigating to ${entryPoint}...`)
-
         await page.goto(entryPoint, {
             waitUntil: 'networkidle2',
         })
 
         if (action) {
-            console.log('Performing action...')
             await action(page)
         }
 
@@ -72,8 +67,6 @@ export async function cachedCrawl({
             cacheFilePath,
             JSON.stringify(responseContents),
         )
-
-        console.log(`Cache created for ${fileName}`)
 
         return responseContents
     }

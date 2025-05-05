@@ -14,6 +14,4 @@ export default async function saveData(
             2,
         ),
     )
-
-    console.log(`Saved ${name} data to ${outputType}-output/${name}.json`)
 }
