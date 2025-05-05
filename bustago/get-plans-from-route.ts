@@ -150,9 +150,9 @@ function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
         }
     }
 
-    if (uniqueIntervals.length === 1) {
+    if (uniqueIntervals.length === 1 && operatingDates.length > 2) {
         console.log('Another type of interval has appeared!', uniqueIntervals)
-        console.log(operatingDates)
+        console.log(operatingDates, uploadedAmount)
         console.log(plans[0])
         throw new Error('Another type of interval has appeared!')
     }

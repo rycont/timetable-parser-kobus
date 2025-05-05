@@ -8,9 +8,9 @@ let i = 0
 
 for (const departingTerminal of terminals.values()) {
     const routes = await getRoutesFromTerminal(departingTerminal.id)
+    console.log(`----- ${i++} / ${terminals.size} -----`)
 
     for (const arrivalTerminal of routes) {
-        console.log(`----- ${i++} / ${terminals.size} -----`)
         console.log(
             `Departure Terminal: ${departingTerminal.name}(${departingTerminal.id})`,
         )
