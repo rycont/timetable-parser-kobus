@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { numericString, timeScheme, yyyymmddScheme } from '../scheme.ts'
+import { timeScheme, yyyymmddScheme } from '../scheme.ts'
 
 export const routeScheme = z.object({
     departureTerminalId: z.string(),
@@ -19,6 +19,8 @@ export const plannedOperationScheme = routeScheme.extend({
         초등생: z.number(),
         중고생: z.number(),
     }),
+    // 경유지
+    via: z.string().array().nullable(),
 })
 
 // NormalizedPlan은 특정 일자가 아닌, 일반적인 운행 패턴을 담고 있는 스키마입니다.
@@ -71,6 +73,7 @@ export const normalizedPlanScheme = plannedOperationScheme
             중고생: z.number().array(),
         }),
         durationInMinutes: z.number().array(),
+        via: z.string().array().array().nullable(),
     })
 
 export type NormalizedPlan = z.infer<typeof normalizedPlanScheme>

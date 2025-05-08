@@ -19,6 +19,7 @@ export function mergePlans(
         'busClass',
         'seatsAmount',
         'durationInMinutes',
+        'via',
     ] as const
 
     for (const planKey in plansByPlanKey) {
@@ -49,6 +50,7 @@ export function mergePlans(
             isTemporaryRoute,
             pattern: determineVariant(operatedDates, parsingWindowSize),
             fare: mergeFares(plans.map((plan) => plan.fare)),
+            via: mergeVia(plans.map((plan) => plan.via)),
         }
 
         normalizedPlans.set(planKey, normalizedPlanScheme.parse(normalizedPlan))
@@ -72,6 +74,15 @@ function mergeFares(fares: PlannedOperation['fare'][]): {
     }
 
     return mergedFare
+}
+
+function mergeVia(vias: (string[] | null)[]): string[][] {
+    const flattenedVias = vias
+        .filter((via): via is string[] => !!via)
+        .map((via) => via.join('/>'))
+    const mergedVias = mergeValues(flattenedVias).map((via) => via.split('/>'))
+
+    return mergedVias
 }
 
 function mergeValues<T>(values: T[]): T[] {
