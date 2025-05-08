@@ -12,7 +12,7 @@ export async function getTerminals() {
     })
 
     const terminals = rawAllTerminalsScheme.parse(JSON.parse(rawTerminals))
-    await saveData('bustago', 'terminals.json', JSON.stringify(terminals))
+    await saveData('bustago', 'terminals', JSON.stringify(terminals))
 
     const terminalsMap = new Map<string, Terminal>(
         terminals.map((terminal) => [terminal.id, terminal]),
