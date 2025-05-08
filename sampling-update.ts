@@ -69,5 +69,4 @@ async function updateBustago() {
 
 await Promise.all([updateKobus(), updateBustago()])
 
-// await removeOldCaches()
-
+await removeOldCaches()
