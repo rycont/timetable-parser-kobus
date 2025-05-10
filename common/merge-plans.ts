@@ -76,13 +76,15 @@ function mergeFares(fares: PlannedOperation['fare'][]): {
     return mergedFare
 }
 
-function mergeStop(stopss: (string[] | null)[]): string[][] {
+function mergeStop(stopss: (string[] | null)[]): {
+    name: string
+}[][] {
     const flattenedStops = stopss
         .filter((stops): stops is string[] => !!stops)
         .map((stops) => stops.join('/>'))
-    const mergedStops = mergeValues(flattenedStops).map((stops) =>
-        stops.split('/>'),
-    )
+    const mergedStops = mergeValues(flattenedStops)
+        .map((stops) => stops.split('/>'))
+        .map((stops) => stops.map((stop) => ({ name: stop })))
 
     return mergedStops
 }

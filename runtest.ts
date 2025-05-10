@@ -2,9 +2,7 @@ import { getPlansFromRoute } from './bustago/get-plans-from-route.ts'
 import { getRoutesFromTerminal } from './bustago/get-routes-from-terminal.ts'
 import { getTerminals } from './bustago/get-terminals.ts'
 
-const terminals = [...(await getTerminals()).values()].toSorted(
-    () => Math.random() - 0.5,
-)
+const terminals = [...(await getTerminals()).values()]
 
 let i = 1
 

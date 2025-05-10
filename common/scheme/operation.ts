@@ -73,7 +73,14 @@ export const normalizedPlanScheme = plannedOperationScheme
             중고생: z.number().array(),
         }),
         durationInMinutes: z.number().array(),
-        stops: z.string().array().array().nullable(),
+        stops: z
+            .object({
+                name: z.string(),
+                time: timeScheme.optional(),
+            })
+            .array()
+            .array()
+            .nullable(),
     })
 
 export type NormalizedPlan = z.infer<typeof normalizedPlanScheme>
