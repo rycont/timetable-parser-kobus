@@ -2,7 +2,9 @@ import { getPlansFromRoute } from './bustago/get-plans-from-route.ts'
 import { getRoutesFromTerminal } from './bustago/get-routes-from-terminal.ts'
 import { getTerminals } from './bustago/get-terminals.ts'
 
-const terminals = [...(await getTerminals()).values()]
+const terminals = [...(await getTerminals()).values()].toSorted((a, b) =>
+    a.id < b.id ? -1 : 1,
+)
 
 let i = 1
 

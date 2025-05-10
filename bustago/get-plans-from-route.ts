@@ -105,15 +105,17 @@ function rawOperationToPlannedOperation(data: RawOperation) {
 }
 
 function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
-    const operatingDates = plans
-        .map(
-            (plan) =>
-                `${plan.DEP_DATE.slice(0, 4)}-${plan.DEP_DATE.slice(
-                    4,
-                    6,
-                )}-${plan.DEP_DATE.slice(6, 8)}`,
-        )
-        .map((date) => new Date(date))
+    const operatingDates = [
+        ...new Set(
+            plans.map(
+                (plan) =>
+                    `${plan.DEP_DATE.slice(0, 4)}-${plan.DEP_DATE.slice(
+                        4,
+                        6,
+                    )}-${plan.DEP_DATE.slice(6, 8)}`,
+            ),
+        ),
+    ].map((date) => new Date(date))
 
     const uploadedAmount = plans[0].BUS_ORDER_CREATE_DAYS
 
@@ -161,15 +163,25 @@ function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
     //     throw new Error('Another type of interval has appeared!')
     // }
 
-    const operationPerDays = Object.groupBy(
-        operatingDates.map((date) => date.getDay() || 7),
-        (date) => date,
+    const operationPerDays = Object.entries(
+        Object.groupBy(operatingDates, (date) => date.getDay() || 7),
     )
 
-    const onceDays = operationPerDays['1']?.toSorted() || []
-    const twiceDays = operationPerDays['2']?.toSorted() || []
+    const onceDays = operationPerDays
+        .filter(([_, dates]) => dates.length === 1)
+        .map(([day, dates]) => dates[0].getDate() || 7)
+    const twiceDays = operationPerDays
+        .filter(([_, dates]) => dates.length === 2)
+        .map(([day, dates]) => dates[0].getDate() || 7)
 
-    if (twiceDays.length !== 0) {
+    // const onceDays =
+    //     operationPerDays['1']?.map((date) => date.getDate() || 7).toSorted() ||
+    //     []
+    // const twiceDays =
+    //     operationPerDays['2']?.map((date) => date.getDate() || 7).toSorted() ||
+    //     []
+
+    if (twiceDays.length > 0 && onceDays.length > 0) {
         return {
             type: 'irregular',
             fixedDays: twiceDays,
@@ -177,8 +189,32 @@ function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
         }
     }
 
-    return {
-        type: 'specific-day',
-        days: onceDays,
+    if (twiceDays.length > 0 && onceDays.length === 0) {
+        return {
+            type: 'specific-day',
+            days: twiceDays,
+        }
     }
+
+    if (twiceDays.length === 0 && onceDays.length > 0) {
+        return {
+            type: 'specific-day',
+            days: onceDays,
+        }
+    }
+
+    console.log(operatingDates)
+    console.log(operationPerDays)
+    throw ''
+
+    // if (onceDays.length === 0) {
+    //     console.log(operatingDates)
+    //     console.log(operationPerDays)
+    //     throw ''
+    // }
+
+    // return {
+    //     type: 'specific-day',
+    //     days: onceDays,
+    // }
 }
