@@ -100,7 +100,7 @@ function rawOperationToPlannedOperation(data: RawOperation) {
         departureTerminalId: data.sterCode,
         arrivalTerminalId: data.eterCode,
         durationInMinutes: data.DIST_TIME,
-        via: data.ROUTE_DATA.split('→'),
+        stops: data.ROUTE_DATA.split('→'),
     })
 }
 

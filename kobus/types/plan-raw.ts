@@ -6,7 +6,10 @@ import {
     ynEnum,
     yyyymmddScheme,
 } from '../../common/scheme.ts'
-import { PlannedOperation, plannedOperationScheme } from '../../common/scheme/operation.ts'
+import {
+    PlannedOperation,
+    plannedOperationScheme,
+} from '../../common/scheme/operation.ts'
 
 export const rawPlanScheme = z.object({
     RMN_SATS_NUM: stringToNumber,
@@ -80,7 +83,7 @@ export const rawPlanListResponseScheme = z
                     초등생: item.CHLD_FEE,
                     중고생: item.TEEN_FEE,
                 },
-                via: [],
+                stops: [],
             } satisfies PlannedOperation),
         ),
     )
