@@ -80,6 +80,7 @@ export const rawPlanListResponseScheme = z
                     초등생: item.CHLD_FEE,
                     중고생: item.TEEN_FEE,
                 },
+                via: [],
             } satisfies PlannedOperation),
         ),
     )
