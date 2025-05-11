@@ -12,7 +12,7 @@ on:
                 default: '20'
             Repetitions:
                 required: true
-                default: '3'
+                default: '5'
                 description: 'Number of times to repeat the update process'
 
 jobs:
@@ -68,10 +68,10 @@ jobs:
             - uses: browser-actions/setup-chrome@v1
               id: setup-chrome
 
-            - name: Run update script ${{ github.event.inputs.Repetitions || 3 }} times
+            - name: Run update script ${{ github.event.inputs.Repetitions || 5 }} times
               run: |
-                  for i in {1..${{ github.event.inputs.Repetitions || 3 }}}; do
-                      echo "Executing run $i of ${{ github.event.inputs.Repetitions || 3 }}"
+                  for i in {1..${{ github.event.inputs.Repetitions || 5 }}}; do
+                      echo "Executing run $i of ${{ github.event.inputs.Repetitions || 5 }}"
                       deno run -A --unstable-temporal sampling-update.ts || echo "Run $i failed, continuing to next run"
                       sleep 5  # Adding a small pause between runs
                   done
