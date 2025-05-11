@@ -36,7 +36,7 @@ export async function getPlansFromRoute(
         )
 
         for (const plan of plans) {
-            const planKey = plan.DEP_TIME
+            const planKey = plan.DEP_TIME + '@' + plan.BUS_ROUTE_ID
 
             if (plansByPlanKey.has(planKey)) {
                 plansByPlanKey.get(planKey)!.push(plan)
@@ -94,13 +94,17 @@ function rawOperationToPlannedOperation(data: RawOperation) {
         },
         busType: data.BUS_TYPE_NM,
         operator: data.TRANSP_BIZR_ABBR_NM,
-        busClass: data.BUS_TYPE_NM,
-        seatsAmount: parseInt(data.TOT_SEAT_CNT),
         isTemporaryRoute: false,
         departureTerminalId: data.sterCode,
         arrivalTerminalId: data.eterCode,
         durationInMinutes: data.DIST_TIME,
         stops: data.ROUTE_DATA.split('→'),
+        extra: {
+            busClass: data.BUS_TYPE_NM,
+            seatsAmount: parseInt(data.TOT_SEAT_CNT),
+        },
+        type: 'bus',
+        routeId: data.BUS_ROUTE_ID,
     })
 }
 
@@ -168,11 +172,12 @@ function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
     )
 
     const onceDays = operationPerDays
-        .filter(([_, dates]) => dates.length === 1)
-        .map(([day, dates]) => dates[0].getDate() || 7)
+        .filter(([_, dates]) => dates!.length === 1)
+        .map(([day, _]) => +day)
+
     const twiceDays = operationPerDays
-        .filter(([_, dates]) => dates.length === 2)
-        .map(([day, dates]) => dates[0].getDate() || 7)
+        .filter(([_, dates]) => dates!.length === 2)
+        .map(([day, _]) => +day)
 
     // const onceDays =
     //     operationPerDays['1']?.map((date) => date.getDate() || 7).toSorted() ||

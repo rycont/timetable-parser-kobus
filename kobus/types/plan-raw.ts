@@ -1,11 +1,5 @@
 import { z } from 'zod'
-import {
-    numericString,
-    stringToNumber,
-    timeScheme,
-    ynEnum,
-    yyyymmddScheme,
-} from '../../common/scheme.ts'
+import { numericString, stringToNumber, ynEnum } from '../../common/scheme.ts'
 import {
     PlannedOperation,
     plannedOperationScheme,
@@ -75,8 +69,6 @@ export const rawPlanListResponseScheme = z
                 operator: item.CACM_MN,
                 arrivalTerminalId: item.ARVL_TRML_NO,
                 departureTerminalId: item.DEPR_TRML_NO,
-                busClass: item.BUS_CLS_NM,
-                seatsAmount: item.TOT_SATS_NUM,
                 date: item.DEPR_DT,
                 fare: {
                     어른: item.ADLT_FEE,
@@ -84,6 +76,12 @@ export const rawPlanListResponseScheme = z
                     중고생: item.TEEN_FEE,
                 },
                 stops: [],
+                extra: {
+                    busClass: item.BUS_CLS_NM,
+                    seatsAmount: item.TOT_SATS_NUM,
+                },
+                type: 'bus',
+                routeId: item.ARVL_TRML_NO + '-' + item.DEPR_TRML_NO,
             } satisfies PlannedOperation),
         ),
     )

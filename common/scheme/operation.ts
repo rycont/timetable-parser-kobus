@@ -9,10 +9,8 @@ export const routeScheme = z.object({
 
 export const plannedOperationScheme = routeScheme.extend({
     operator: z.string(),
-    busClass: z.string(),
     departureTime: timeScheme,
     isTemporaryRoute: z.boolean(),
-    seatsAmount: z.number(),
     date: yyyymmddScheme,
     fare: z.object({
         어른: z.number(),
@@ -21,6 +19,12 @@ export const plannedOperationScheme = routeScheme.extend({
     }),
     // 경유지
     stops: z.string().array().nullable(),
+    type: z.literal('bus'),
+    extra: z.object({
+        seatsAmount: z.number(),
+        busClass: z.string(),
+    }),
+    routeId: z.string(),
 })
 
 // NormalizedPlan은 특정 일자가 아닌, 일반적인 운행 패턴을 담고 있는 스키마입니다.
@@ -65,8 +69,6 @@ export const normalizedPlanScheme = plannedOperationScheme
     .extend({
         pattern: operatingPatternScheme,
         operator: z.string().array(),
-        busClass: z.string().array(),
-        seatsAmount: z.number().array(),
         fare: z.object({
             어른: z.number().array(),
             초등생: z.number().array(),
@@ -81,6 +83,10 @@ export const normalizedPlanScheme = plannedOperationScheme
             .array()
             .array()
             .nullable(),
+        extra: z.object({
+            seatsAmount: z.number().array(),
+            busClass: z.string().array(),
+        }),
     })
 
 export type NormalizedPlan = z.infer<typeof normalizedPlanScheme>

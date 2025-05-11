@@ -10,20 +10,23 @@ export function mergePlans(
     parsingWindowSize: number,
 ) {
     const plansByPlanKey = Object.groupBy(plans, (plan) =>
-        flattenDepartureTime(plan),
+        [plan.routeId, plan.departureTime.hour, plan.departureTime.minute].join(
+            '@',
+        ),
     )
     const normalizedPlans = new Map<string, NormalizedPlan>()
 
     const mergingKeys = [
         'operator',
-        'busClass',
-        'seatsAmount',
         'durationInMinutes',
         'stops',
+        'routeId',
     ] as const
 
     for (const planKey in plansByPlanKey) {
-        let normalizedPlan: Partial<NormalizedPlan> = {}
+        let normalizedPlan: Partial<NormalizedPlan> = {
+            type: 'bus',
+        }
 
         const plans = plansByPlanKey[planKey]!
 
@@ -51,6 +54,18 @@ export function mergePlans(
             pattern: determineVariant(operatedDates, parsingWindowSize),
             fare: mergeFares(plans.map((plan) => plan.fare)),
             stops: mergeStop(plans.map((plan) => plan.stops)),
+            extra: mergeExtra(plans.map((plan) => plan.extra)),
+            routeId: plans[0].routeId,
+        }
+
+        const uniqueRouteIds = new Set(plans.map((plan) => plan.routeId))
+
+        if (uniqueRouteIds.size > 1) {
+            throw new Error(
+                `Merged plans have different route IDs: ${[
+                    ...uniqueRouteIds,
+                ].join(', ')}`,
+            )
         }
 
         normalizedPlans.set(planKey, normalizedPlanScheme.parse(normalizedPlan))
@@ -96,6 +111,17 @@ function mergeValues<T>(values: T[]): T[] {
     return uniqueValues
 }
 
-function flattenDepartureTime(plan: PlannedOperation) {
-    return `${plan.departureTime.hour}-${plan.departureTime.minute}`
+function mergeExtra(
+    extras: PlannedOperation['extra'][],
+): NormalizedPlan['extra'] {
+    const mergedExtra = {} as NormalizedPlan['extra']
+    const mergingKeys = ['seatsAmount', 'busClass'] as const
+
+    for (const mergingKey of mergingKeys) {
+        const values = extras.map((extra) => extra[mergingKey])
+        //@ts-ignore
+        mergedExtra[mergingKey] = mergeValues(values)
+    }
+
+    return mergedExtra
 }
