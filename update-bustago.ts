@@ -2,8 +2,8 @@ import { getPlansFromRoute } from './bustago/get-plans-from-route.ts'
 import { getRoutesFromTerminal } from './bustago/get-routes-from-terminal.ts'
 import { getTerminals } from './bustago/get-terminals.ts'
 
-const terminals = [...(await getTerminals()).values()].toSorted((a, b) =>
-    a.id < b.id ? -1 : 1,
+const terminals = [...(await getTerminals()).values()].toSorted(
+    () => 0.5 - Math.random(),
 )
 
 let i = 1
