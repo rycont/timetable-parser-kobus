@@ -1,11 +1,14 @@
 import { cachedCrawl } from '../common/cached-crawl.ts'
 import saveData from '../common/save-data.ts'
-import { Terminal } from "../common/scheme/terminal.ts";
+import { Terminal } from '../common/scheme/terminal.ts'
 import { rawRouteResponseScheme } from './types/terminal-raw.ts'
 import { Route } from './types/terminal.ts'
 
 export async function getTerminals() {
-    const [routesRawString] = await cachedCrawl({
+    const {
+        data: [routesRawString],
+        fresh,
+    } = await cachedCrawl({
         entryPoint: 'https://www.kobus.co.kr/main.do',
         fileName: `kobus-terminals.json`,
         targetUri: 'https://www.kobus.co.kr/mrs/readRotLinInf.ajax',
@@ -48,8 +51,6 @@ export async function getTerminals() {
         a.id > b.id ? 1 : -1,
     )
 
-    await saveData('kobus', 'terminals', JSON.stringify(terminals, null, 2))
-
     const routes = Array.from(routesMap).toSorted((a, b) =>
         a.departureTerminalId + a.arrivalTerminalId >
         b.departureTerminalId + b.arrivalTerminalId
@@ -57,7 +58,10 @@ export async function getTerminals() {
             : -1,
     )
 
-    await saveData('kobus', 'connections', JSON.stringify(routes, null, 2))
+    if (fresh) {
+        await saveData('kobus', 'terminals', JSON.stringify(terminals, null, 2))
+        await saveData('kobus', 'connections', JSON.stringify(routes, null, 2))
+    }
 
     return {
         terminals: terminalsMap,

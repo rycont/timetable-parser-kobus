@@ -6,9 +6,10 @@ function createURI(terminalId: string) {
     return `https://www.bustago.or.kr/newweb/kr/common/terminalEndListAjax.do?area=&country=&terCode=${terminalId}`
 }
 
-export async function getRoutesFromTerminal(
-    terminalId: string,
-): Promise<Terminal[]> {
+export async function getRoutesFromTerminal(terminalId: string): Promise<{
+    data: Terminal[]
+    cached: boolean
+}> {
     const rawEndTerminals = await cachedFetch(
         `bustago-route-from-${terminalId}.json`,
         createURI(terminalId),
@@ -17,6 +18,12 @@ export async function getRoutesFromTerminal(
         },
     )
 
-    const endTerminals = rawEndTerminalScheme.parse(JSON.parse(rawEndTerminals))
-    return endTerminals
+    const endTerminals = rawEndTerminalScheme.parse(
+        JSON.parse(rawEndTerminals.data),
+    )
+
+    return {
+        data: endTerminals,
+        cached: rawEndTerminals.cached,
+    }
 }

@@ -5,13 +5,19 @@ export async function cachedFetch(
     filename: string,
     url: string,
     options?: RequestInit,
-): Promise<string> {
+): Promise<{
+    cached: boolean
+    data: string
+}> {
     const cacheFilePath = createCacheFileName(filename)
 
     try {
         const cache = await Deno.readTextFile(cacheFilePath)
         console.log('Cache hit')
-        return cache as string
+        return {
+            cached: true,
+            data: cache,
+        }
     } catch (e) {
         if (!(e instanceof Deno.errors.NotFound)) {
             throw e
@@ -31,5 +37,8 @@ export async function cachedFetch(
 
     await new Promise((resolve) => setTimeout(resolve, 700))
 
-    return data
+    return {
+        cached: false,
+        data,
+    }
 }

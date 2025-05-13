@@ -1,11 +1,12 @@
-import { DOMParser } from 'jsr:@b-fuze/deno-dom'
+import { DOMParser } from '@b-fuze/deno-dom'
 import { cachedFetch } from '../../common/cached-fetch.ts'
 
 const URI = 'https://intercitybus.tmoney.co.kr/runinf/runInf.do'
 
 export default async function getServerDate() {
-    const text = await cachedFetch('tmoney-run-information.json', URI)
-    const dom = new DOMParser().parseFromString(text, 'text/html')
+    const cachedPage = await cachedFetch('tmoney-run-information.json', URI)
+
+    const dom = new DOMParser().parseFromString(cachedPage.data, 'text/html')
     const serverDateYYYYMMDD = dom
         .getElementById('depr_Dt')
         ?.getAttribute('value')

@@ -18,12 +18,18 @@ export async function cachedCrawl({
     targetUri: string
     fileName: string
     action?: (page: puppeteer.Page) => Promise<void>
-}) {
+}): Promise<{
+    fresh: boolean
+    data: string[]
+}> {
     const cacheFilePath = createCacheFileName(fileName)
     try {
         const cache = await Deno.readTextFile(cacheFilePath)
         console.log('Cache hit')
-        return JSON.parse(cache) as string[]
+        return {
+            fresh: false,
+            data: JSON.parse(cache) as string[],
+        }
     } catch (e) {
         if (!(e instanceof Deno.errors.NotFound)) {
             throw e
@@ -66,7 +72,10 @@ export async function cachedCrawl({
             JSON.stringify(responseContents),
         )
 
-        return responseContents
+        return {
+            fresh: true,
+            data: responseContents,
+        }
     }
 }
 

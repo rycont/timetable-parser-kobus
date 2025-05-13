@@ -14,19 +14,26 @@ export async function getDepartingTerminals() {
     formData.append('pre_Trml_Cd', '')
     formData.append('rtnGbn', '02')
 
-    const rawTerminals = JSON.parse(
-        await cachedFetch(CACHE_NAME, TERMINAL_JSON_URL, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-        }),
-    )
+    const rawTerminalCache = await cachedFetch(CACHE_NAME, TERMINAL_JSON_URL, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+
+    const rawTerminals = JSON.parse(rawTerminalCache.data)
 
     const terminals = rawTmoneyTerminalParser.parse(rawTerminals)
-    await saveData('tmoney', 'terminals', JSON.stringify(terminals, null, 2))
+
+    if (!rawTerminalCache.cached) {
+        await saveData(
+            'tmoney',
+            'terminals',
+            JSON.stringify(terminals, null, 2),
+        )
+    }
 
     const terminalMap = new Map<string, Terminal>(
         terminals.map((terminal) => [terminal.id, terminal]),

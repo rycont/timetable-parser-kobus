@@ -9,9 +9,12 @@ export async function getRoutePlans(
     departureTerminal: Terminal,
     arrivalTerminal: Terminal,
 ) {
-    const rawResult = await fetchKobusPlans(departureTerminal, arrivalTerminal)
+    const rawResultCache = await fetchKobusPlans(
+        departureTerminal,
+        arrivalTerminal,
+    )
 
-    const timetableByDate = rawResult
+    const timetableByDate = rawResultCache.data
         .map((item) => rawPlanListResponseScheme.parse(JSON.parse(item)))
         .filter((item) => item.length > 0)
 
@@ -25,11 +28,13 @@ export async function getRoutePlans(
                 (b.departureTime.hour * 60 + b.departureTime.minute),
         )
 
-    await saveData(
-        'kobus',
-        `timetable/${departureTerminal.id}-${arrivalTerminal.id}`,
-        JSON.stringify(mergedPlans, null, 2),
-    )
+    if (rawResultCache.fresh) {
+        await saveData(
+            'kobus',
+            `timetable/${departureTerminal.id}-${arrivalTerminal.id}`,
+            JSON.stringify(mergedPlans, null, 2),
+        )
+    }
 
     return mergedPlans
 }

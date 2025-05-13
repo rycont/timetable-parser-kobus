@@ -7,7 +7,10 @@ import { Terminal } from '../../common/scheme/terminal.ts'
 export async function fetchKobusPlans(
     departureTerminal: Terminal,
     arrivalTerminal: Terminal,
-): Promise<string[]> {
+): Promise<{
+    fresh: boolean
+    data: string[]
+}> {
     const date = new Date()
 
     const fileName = `kobus-route-plans-${departureTerminal.id}-${arrivalTerminal.id}.json`

@@ -22,20 +22,22 @@ export async function getRoutesFromTerminals(terminalCode: string) {
     formData.append('pre_Trml_Cd', terminalCode.slice(PREFIX.TMONEY.length))
     formData.append('rtnGbn', '02')
 
-    const rawTargetTerminals = JSON.parse(
-        await cachedFetch(CACHE_NAME, API_URL, {
-            method: 'POST',
-            body: formData,
-        }),
-    )
+    const targetTerminalCache = await cachedFetch(CACHE_NAME, API_URL, {
+        method: 'POST',
+        body: formData,
+    })
+
+    const rawTargetTerminals = JSON.parse(targetTerminalCache.data)
 
     const targetTerminals = rawTmoneyTerminalParser.parse(rawTargetTerminals)
 
-    await saveData(
-        'tmoney',
-        `target-terminals-from-${terminalCode}`,
-        JSON.stringify(targetTerminals, null, 2),
-    )
+    if (!targetTerminalCache.cached) {
+        await saveData(
+            'tmoney',
+            `target-terminals-from-${terminalCode}`,
+            JSON.stringify(targetTerminals, null, 2),
+        )
+    }
 
     const targetTerminalMap = new Map<string, Terminal>(
         targetTerminals.map((terminal) => [terminal.id, terminal]),
