@@ -46,7 +46,9 @@ async function updateBustago() {
     let progress = 1
 
     for (const departingTerminal of randomTerminals) {
-        const routes = await getBustagoRoutesFromTerminal(departingTerminal.id)
+        const { data: routes } = await getBustagoRoutesFromTerminal(
+            departingTerminal.id,
+        )
         const sampledRoutes = routes
             .toSorted(() => Math.random() - 0.5)
             .slice(0, SAMPLES / 2)

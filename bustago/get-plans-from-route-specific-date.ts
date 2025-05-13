@@ -33,6 +33,9 @@ export default async function getPlansFromRouteInSpecificDate(
         body: requestBody,
     })
 
-    const operations = rawOperationScheme.parse(JSON.parse(cachedResponse))
-    return operations
+    const operations = rawOperationScheme.parse(JSON.parse(cachedResponse.data))
+    return {
+        data: operations,
+        fresh: !cachedResponse.cached,
+    }
 }

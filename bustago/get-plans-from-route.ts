@@ -26,6 +26,8 @@ export async function getPlansFromRoute(
 
     const iterations = Array(PARSING_WINDOW_SIZE).fill(0)
 
+    let isFresh = false
+
     for await (const _ of tqdm(iterations)) {
         date.setDate(date.getDate() + 1)
 
@@ -35,7 +37,11 @@ export async function getPlansFromRoute(
             date,
         )
 
-        for (const plan of plans) {
+        if (plans.fresh) {
+            isFresh = true
+        }
+
+        for (const plan of plans.data) {
             const planKey = plan.DEP_TIME + '@' + plan.BUS_ROUTE_ID
 
             if (plansByPlanKey.has(planKey)) {
@@ -50,11 +56,13 @@ export async function getPlansFromRoute(
         mergeBustagoPlans(plans),
     )
 
-    await saveData(
-        'bustago',
-        `timetable/${departureTerminalId}-${arrivalTerminalId}`,
-        JSON.stringify(mergedPlans, null, 2),
-    )
+    if (isFresh) {
+        await saveData(
+            'bustago',
+            `timetable/${departureTerminalId}-${arrivalTerminalId}`,
+            JSON.stringify(mergedPlans, null, 2),
+        )
+    }
 
     return mergedPlans
 }

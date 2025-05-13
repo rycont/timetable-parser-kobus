@@ -9,7 +9,7 @@ const terminals = [...(await getTerminals()).values()].toSorted(
 let i = 1
 
 for (const departingTerminal of terminals) {
-    const routes = await getRoutesFromTerminal(departingTerminal.id)
+    const { data: routes } = await getRoutesFromTerminal(departingTerminal.id)
     console.log(`----- ${i++} / ${terminals.length} -----`)
 
     let j = 1
