@@ -20,10 +20,10 @@ for (const departingTerminal of terminals) {
         const routeId = `${departingTerminal.id}-${arrivalTerminal.id}`
 
         j++
-        if (parsingFinishedRoutes.has(routeId)) {
-            console.log(`Already parsed ${routeId}`)
-            continue
-        }
+        // if (parsingFinishedRoutes.has(routeId)) {
+        //     console.log(`Already parsed ${routeId}`)
+        //     continue
+        // }
 
         console.log(
             `----- ${j} of ${routes.length} in ${departingTerminal.name}(${departingTerminal.id}, ${i} of ${terminals.length}) -----`,
