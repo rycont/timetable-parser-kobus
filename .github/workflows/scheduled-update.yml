@@ -84,12 +84,12 @@ jobs:
                   cd kobus-output
                   git add -A
                   git commit -m "Regular Data Update(Kobus)"
-                  git push origin
+                  git push origin || echo "No changes to commit in Kobus"
                   cd ../bustago-output
                   git add -A
                   git commit -m "Regular Data Update(Bustago)"
-                  git push origin
+                  git push origin || echo "No changes to commit in Bustago"
                   cd ..
                   git add -A
                   git commit -m "Regular Data Update(Workspace)"
-                  git push origin
+                  git push origin || echo "No changes to commit in Workspace"
