@@ -8,6 +8,8 @@ const browser = await puppeteer.launch({
     args: ['--no-sandbox'],
 })
 
+const cacheStore = new Map<string, string[]>()
+
 export async function cachedCrawl({
     entryPoint,
     fileName,
@@ -23,12 +25,26 @@ export async function cachedCrawl({
     data: string[]
 }> {
     const cacheFilePath = createCacheFileName(fileName)
+
     try {
+        if (cacheStore.has(cacheFilePath)) {
+            console.log('Cache hit')
+
+            return {
+                fresh: false,
+                data: cacheStore.get(cacheFilePath) as string[],
+            }
+        }
+
         const cache = await Deno.readTextFile(cacheFilePath)
         console.log('Cache hit')
+
+        const data = JSON.parse(cache) as string[]
+        cacheStore.set(cacheFilePath, data)
+
         return {
             fresh: false,
-            data: JSON.parse(cache) as string[],
+            data,
         }
     } catch (e) {
         if (!(e instanceof Deno.errors.NotFound)) {
@@ -71,6 +87,8 @@ export async function cachedCrawl({
             cacheFilePath,
             JSON.stringify(responseContents),
         )
+
+        cacheStore.set(cacheFilePath, responseContents)
 
         return {
             fresh: true,

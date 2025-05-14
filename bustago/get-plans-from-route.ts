@@ -24,11 +24,14 @@ export async function getPlansFromRoute(
 
     const plansByPlanKey: Map<string, RawOperation[]> = new Map()
 
-    const iterations = Array(PARSING_WINDOW_SIZE).fill(0)
+    const iterations = Array(PARSING_WINDOW_SIZE)
+        .fill(0)
+        .map((_, index) => index)
 
     let isFresh = false
+    let operations = 0
 
-    for await (const _ of tqdm(iterations)) {
+    for await (const index of tqdm(iterations)) {
         date.setDate(date.getDate() + 1)
 
         const plans = await getPlansFromRouteInSpecificDate(
@@ -36,6 +39,13 @@ export async function getPlansFromRoute(
             arrivalTerminalId,
             date,
         )
+
+        operations += plans.data.length
+
+        if (index === 7 && plans.data.length === 0) {
+            console.log('Maybe the route is not available')
+            break
+        }
 
         if (plans.fresh) {
             isFresh = true
