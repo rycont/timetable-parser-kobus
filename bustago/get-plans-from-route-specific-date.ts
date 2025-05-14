@@ -25,17 +25,28 @@ export default async function getPlansFromRouteInSpecificDate(
 
     const cacheKey = `bustago-plans-${departureTerminalId}-${arrivalTerminalId}-${dateString}.json`
 
-    const cachedResponse = await cachedFetch(cacheKey, URI, {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
-        body: requestBody,
-    })
+    try {
+        const cachedResponse = await cachedFetch(cacheKey, URI, {
+            method: 'POST',
+            headers: {
+                'content-type':
+                    'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            body: requestBody,
+        })
 
-    const operations = rawOperationScheme.parse(JSON.parse(cachedResponse.data))
-    return {
-        data: operations,
-        fresh: !cachedResponse.cached,
+        const operations = rawOperationScheme.parse(
+            JSON.parse(cachedResponse.data),
+        )
+        return {
+            data: operations,
+            fresh: !cachedResponse.cached,
+        }
+    } catch (error) {
+        console.error('Error fetching plans:', error)
+        return {
+            data: [],
+            fresh: false,
+        }
     }
 }
