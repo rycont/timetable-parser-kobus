@@ -1,5 +1,3 @@
-import { tqdm } from '@thesephist/tsqdm'
-
 import { cachedCrawl } from '../../common/cached-crawl.ts'
 import { formatLocalDate } from '../../common/format-local-date.ts'
 import { Terminal } from '../../common/scheme/terminal.ts'
@@ -40,8 +38,6 @@ export async function fetchKobusPlans(
             date.setMonth(parseInt(mm) - 1)
             date.setDate(parseInt(dd) + 1)
 
-            console.log(`서버시간: ${serverDateYYYYMMDD}`)
-
             // Set departure and arrival terminals
             await page.evaluate(
                 `
@@ -61,7 +57,7 @@ document.querySelector('#prmmDcYn').value = 'N'
                 .fill(0)
                 .map((_, i) => i)
 
-            for await (const _ of tqdm(range)) {
+            for await (const _ of range) {
                 const yyyymmdd = formatLocalDate(date)
                 await page.evaluate(
                     `

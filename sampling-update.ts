@@ -11,39 +11,29 @@ import { getPlansFromRoute as getBustagoPlansFromRoute } from './bustago/get-pla
 const SAMPLES = parseInt(Deno.env.get('UPDATE_SAMPLES') ?? '20', 10)
 
 async function updateKobus() {
+    console.time('Kobus: Sampling update')
+
     const { routes, terminals } = await getKobusTerminals()
     const sampledRoutes = routes
         .toSorted(() => Math.random() - 0.5)
         .slice(0, SAMPLES)
 
-    let progress = 1
-
     for (const route of sampledRoutes) {
-        console.log(
-            '[KOBUS] %s -> %s (%d / %d)',
-            route.departureTerminalId,
-            route.arrivalTerminalId,
-            progress++,
-            SAMPLES,
-        )
-
         const departureTerminal = terminals.get(route.departureTerminalId)!
         const arrivalTerminal = terminals.get(route.arrivalTerminalId)!
-
         await getKobusRoutePlans(departureTerminal, arrivalTerminal)
     }
 
     await closeBrowser()
-    console.log('Kobus Updated!')
+    console.timeEnd('Kobus: Sampling update')
 }
 
 async function updateBustago() {
+    console.time('Bustago: Sampling update')
     const terminals = [...(await getBustagoTerminals()).values()]
     const randomTerminals = terminals
         .toSorted(() => Math.random() - 0.5)
         .slice(0, 4)
-
-    let progress = 1
 
     for (const departingTerminal of randomTerminals) {
         const { data: routes } = await getBustagoRoutesFromTerminal(
@@ -54,19 +44,13 @@ async function updateBustago() {
             .slice(0, SAMPLES / 2)
 
         for (const arrivingTerminal of sampledRoutes) {
-            console.log(
-                '[BUSTAGO] %s -> %s (%d / %d)',
-                departingTerminal.name,
-                arrivingTerminal.name,
-                progress++,
-                sampledRoutes.length * randomTerminals.length,
-            )
             await getBustagoPlansFromRoute(
                 departingTerminal.id,
                 arrivingTerminal.id,
             )
         }
     }
+    console.timeEnd('Bustago: Sampling update')
 }
 
 await Promise.all([updateKobus(), updateBustago()])

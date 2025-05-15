@@ -1,4 +1,3 @@
-import { tqdm } from '@thesephist/tsqdm'
 import { mergePlans } from '../common/merge-plans.ts'
 import saveData from '../common/save-data.ts'
 import {
@@ -31,7 +30,10 @@ export async function getPlansFromRoute(
     let isFresh = false
     let operations = 0
 
-    for await (const index of tqdm(iterations)) {
+    const timeKey = `Bustago: ${departureTerminalId} -> ${arrivalTerminalId}`
+    console.time(timeKey)
+
+    for await (const index of iterations) {
         date.setDate(date.getDate() + 1)
 
         const plans = await getPlansFromRouteInSpecificDate(
@@ -43,7 +45,6 @@ export async function getPlansFromRoute(
         operations += plans.data.length
 
         if (index === 7 && plans.data.length === 0) {
-            console.log('Maybe the route is not available')
             break
         }
 
@@ -67,6 +68,8 @@ export async function getPlansFromRoute(
     )
 
     if (isFresh) {
+        console.timeEnd(timeKey)
+
         await saveData(
             'bustago',
             `timetable/${departureTerminalId}-${arrivalTerminalId}`,

@@ -9,6 +9,9 @@ export async function getRoutePlans(
     departureTerminal: Terminal,
     arrivalTerminal: Terminal,
 ) {
+    const timeKey = `Kobus: ${departureTerminal.name}(${departureTerminal.id}) -> ${arrivalTerminal.name}(${arrivalTerminal.id})`
+    console.time(timeKey)
+
     const rawResultCache = await fetchKobusPlans(
         departureTerminal,
         arrivalTerminal,
@@ -29,6 +32,7 @@ export async function getRoutePlans(
         )
 
     if (rawResultCache.fresh) {
+        console.timeEnd(timeKey)
         await saveData(
             'kobus',
             `timetable/${departureTerminal.id}-${arrivalTerminal.id}`,

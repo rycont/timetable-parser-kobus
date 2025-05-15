@@ -15,8 +15,6 @@ export async function cachedFetch(
 
     try {
         if (cacheStore.has(cacheFilePath)) {
-            console.log('Cache hit')
-
             return {
                 cached: false,
                 data: cacheStore.get(cacheFilePath) as string,
@@ -24,7 +22,6 @@ export async function cachedFetch(
         }
 
         const cache = await Deno.readTextFile(cacheFilePath)
-        console.log('Cache hit')
 
         cacheStore.set(cacheFilePath, cache)
 

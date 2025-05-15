@@ -3,8 +3,6 @@ const CACHE_DIR = Deno.env.get('CACHE_DIR') || './cache'
 const TODAY_YYYY_MM_DD = new Date().toISOString().split('T')[0]
 
 export default async function removeOldCaches() {
-    console.log('Cleaning up old caches...')
-
     // 생성된 날짜가 오늘이 아닌 캐시 파일을 삭제합니다.
     for await (const file of Deno.readDir(CACHE_DIR)) {
         const datePrefix = file.name.slice(0, 10)

@@ -28,8 +28,6 @@ export async function cachedCrawl({
 
     try {
         if (cacheStore.has(cacheFilePath)) {
-            console.log('Cache hit')
-
             return {
                 fresh: false,
                 data: cacheStore.get(cacheFilePath) as string[],
@@ -37,7 +35,6 @@ export async function cachedCrawl({
         }
 
         const cache = await Deno.readTextFile(cacheFilePath)
-        console.log('Cache hit')
 
         const data = JSON.parse(cache) as string[]
         cacheStore.set(cacheFilePath, data)

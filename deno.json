@@ -2,7 +2,6 @@
   "imports": {
     "@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
     "@roka/git": "jsr:@roka/git@^0.3.1",
-    "@thesephist/tsqdm": "npm:@thesephist/tsqdm@^0.1.1",
     "puppeteer-core": "npm:puppeteer-core@^24.6.1",
     "zod": "npm:zod@^3.24.2"
   },
