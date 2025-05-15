@@ -44,12 +44,12 @@ export async function getPlansFromRoute(
 
         operations += plans.data.length
 
-        if (index === 7 && plans.data.length === 0) {
-            break
-        }
-
         if (plans.fresh) {
             isFresh = true
+        }
+
+        if (index === 7 && plans.data.length === 0) {
+            break
         }
 
         for (const plan of plans.data) {

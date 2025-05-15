@@ -7,11 +7,12 @@ export async function cachedFetch(
     filename: string,
     url: string,
     options?: RequestInit,
+    useDatePrefix = true,
 ): Promise<{
     cached: boolean
     data: string
 }> {
-    const cacheFilePath = createCacheFileName(filename)
+    const cacheFilePath = createCacheFileName(filename, useDatePrefix)
 
     try {
         if (cacheStore.has(cacheFilePath)) {

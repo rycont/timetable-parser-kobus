@@ -6,18 +6,20 @@ const terminals = [...(await getTerminals()).values()].toSorted(
     () => 0.5 - Math.random(),
 )
 
-let i = 1
+let allRoutes = 0
 
-const parsingFinishedRoutes = await getAlreadyParsedRoutes()
+for (const terminal of terminals) {
+    const avaliableRoutes = await getRoutesFromTerminal(terminal.id)
+    allRoutes += avaliableRoutes.data.length
+}
+
+let j = 0
 
 for (const departingTerminal of terminals) {
     const { data: routes } = await getRoutesFromTerminal(departingTerminal.id)
-    console.log(`----- ${i++} / ${terminals.length} -----`)
-
-    let j = 0
 
     for (const arrivalTerminal of routes) {
-        const routeId = `${departingTerminal.id}-${arrivalTerminal.id}`
+        // const routeId = `${departingTerminal.id}-${arrivalTerminal.id}`
 
         j++
         // if (parsingFinishedRoutes.has(routeId)) {
@@ -25,31 +27,15 @@ for (const departingTerminal of terminals) {
         //     continue
         // }
 
+        // console.log(
+        //     `----- ${j} of ${routes.length} in ${departingTerminal.name}(${departingTerminal.id}, ${i} of ${terminals.length}) -----`,
+        // )
+        // console.log(
+        //     `Arrival Terminal: ${arrivalTerminal.name}(${arrivalTerminal.id})`,
+        // )
         console.log(
-            `----- ${j} of ${routes.length} in ${departingTerminal.name}(${departingTerminal.id}, ${i} of ${terminals.length}) -----`,
+            `[BUSTAGO] ${j} / ${allRoutes} (${departingTerminal.name}(${departingTerminal.id}) -> ${arrivalTerminal.name}(${arrivalTerminal.id}))`,
         )
-        console.log(
-            `Arrival Terminal: ${arrivalTerminal.name}(${arrivalTerminal.id})`,
-        )
-        console.log(
-            await getPlansFromRoute(departingTerminal.id, arrivalTerminal.id),
-        )
+        await getPlansFromRoute(departingTerminal.id, arrivalTerminal.id)
     }
-}
-
-async function getAlreadyParsedRoutes() {
-    const routes = new Set<string>()
-
-    for await (const entry of Deno.readDir('./bustago-output/timetable')) {
-        if (entry.isFile) {
-            const name = entry.name
-            if (name.includes('metadata')) {
-                continue
-            }
-
-            routes.add(name.split('.')[0])
-        }
-    }
-
-    return routes
 }

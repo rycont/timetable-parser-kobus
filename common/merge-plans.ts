@@ -98,6 +98,7 @@ function mergeStop(stopss: (string[] | null)[]): {
         .filter((stops): stops is string[] => !!stops)
         .map((stops) => stops.join('/>'))
     const mergedStops = mergeValues(flattenedStops)
+        .filter((stopsString) => stopsString.length > 0)
         .map((stops) => stops.split('/>'))
         .map((stops) => stops.map((stop) => ({ name: stop })))
 
