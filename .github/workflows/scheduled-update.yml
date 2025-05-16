@@ -12,7 +12,7 @@ on:
                 default: '4'
             RepetitionTime:
                 required: true
-                default: '5'
+                default: '20'
                 description: '실행 기간 (분)'
 
 jobs:
