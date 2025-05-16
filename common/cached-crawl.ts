@@ -15,16 +15,18 @@ export async function cachedCrawl({
     fileName,
     targetUri,
     action,
+    useDatePrefix = true,
 }: {
     entryPoint: string
     targetUri: string
     fileName: string
     action?: (page: puppeteer.Page) => Promise<void>
+    useDatePrefix?: boolean
 }): Promise<{
     fresh: boolean
     data: string[]
 }> {
-    const cacheFilePath = createCacheFileName(fileName)
+    const cacheFilePath = createCacheFileName(fileName, useDatePrefix)
 
     try {
         if (cacheStore.has(cacheFilePath)) {
