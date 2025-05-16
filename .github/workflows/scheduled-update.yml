@@ -68,11 +68,11 @@ jobs:
             - uses: browser-actions/setup-chrome@v1
               id: setup-chrome
 
-            - name: Repeat update script for ${{ github.event.inputs.RepetitionTime || 5 }} minutes
+            - name: Repeat update script for ${{ github.event.inputs.RepetitionTime || 20 }} minutes
               run: |
-                  run_for_10min() {
+                  run_for_min() {
                     local cmd="$1"
-                    local end=$((SECONDS + ${{ github.event.inputs.RepetitionTime || 5 }} * 60))
+                    local end=$((SECONDS + ${{ github.event.inputs.RepetitionTime || 20 }} * 60))
 
                     while [ $SECONDS -lt $end ]; do
                       $cmd
@@ -81,11 +81,11 @@ jobs:
                   }
 
                   update_kobus() {
-                    run_for_10min "deno run -A --unstable-temporal update-sample-kobus.ts"
+                    run_for_min "deno run -A --unstable-temporal update-sample-kobus.ts"
                   }
                   
                   update_bustago() {
-                    run_for_10min "deno run -A --unstable-temporal update-sample-bustago.ts"
+                    run_for_min "deno run -A --unstable-temporal update-sample-bustago.ts"
                   }
 
                   update_kobus &
