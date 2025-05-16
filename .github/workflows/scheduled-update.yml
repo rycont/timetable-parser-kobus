@@ -9,7 +9,7 @@ on:
         inputs:
             Samples:
                 required: true
-                default: '20'
+                default: '4'
             RepetitionTime:
                 required: true
                 default: '5'
