@@ -10,10 +10,10 @@ on:
             Samples:
                 required: true
                 default: '20'
-            Repetitions:
+            RepetitionTime:
                 required: true
-                default: '7'
-                description: 'Number of times to repeat the update process'
+                default: '5'
+                description: '실행 기간 (분)'
 
 jobs:
     update-data:
@@ -68,16 +68,36 @@ jobs:
             - uses: browser-actions/setup-chrome@v1
               id: setup-chrome
 
-            - name: Run update script ${{ github.event.inputs.Repetitions || 7 }} times
+            - name: Repeat update script for ${{ github.event.inputs.RepetitionTime || 5 }} minutes
               run: |
-                  for i in {1..${{ github.event.inputs.Repetitions || 7 }}}; do
-                      echo "Executing run $i of ${{ github.event.inputs.Repetitions || 7 }}"
-                      deno run -A --unstable-temporal sampling-update.ts || echo "Run $i failed, continuing to next run"
-                      sleep 5  # Adding a small pause between runs
-                  done
+                  run_for_10min() {
+                    local cmd="$1"
+                    local end=$((SECONDS + ${{ github.event.inputs.RepetitionTime || 5 }} * 60))
+
+                    while [ $SECONDS -lt $end ]; do
+                      $cmd
+                      sleep 1
+                    done
+                  }
+
+                  update_kobus() {
+                    run_for_10min "deno run -A --unstable-temporal update-sample-kobus.ts"
+                  }
+                  
+                  update_bustago() {
+                    run_for_10min "deno run -A --unstable-temporal update-sample-bustago.ts"
+                  }
+
+                  update_kobus &
+                  update_bustago &
+
+                  wait
+
+                  echo "Kobus and Bustago updates completed."
+
               env:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 20 }}
+                  UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 4 }}
 
             - name: Push to GitHub
               run: |
