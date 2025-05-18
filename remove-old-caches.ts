@@ -12,7 +12,7 @@ export default async function removeOldCaches() {
         if (file.isFile && !isNaN(+prefix[0]) && isOldCache(prefix)) {
             const filePath = `${CACHE_DIR}/${file.name}`
             console.log(`Deleting old cache file: ${filePath}`)
-            // await Deno.remove(filePath)
+            await Deno.remove(filePath)
         }
     }
 

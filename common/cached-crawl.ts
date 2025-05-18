@@ -77,6 +77,8 @@ export async function cachedCrawl({
 
         await responsePromise
 
+        await new Promise((resolve) => setTimeout(resolve, 100))
+        
         await page.close()
         await context.close()
 
