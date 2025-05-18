@@ -75,7 +75,7 @@ jobs:
                     local end=$((SECONDS + ${{ github.event.inputs.RepetitionTime || 20 }} * 60))
 
                     while [ $SECONDS -lt $end ]; do
-                      $cmd
+                      $cmd || echo "Command failed, retrying..."
                       sleep 1
                     done
                   }
