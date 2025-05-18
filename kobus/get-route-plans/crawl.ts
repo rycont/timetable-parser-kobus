@@ -22,7 +22,11 @@ export async function fetchKobusPlans(
                 await new Promise((resolve) =>
                     setTimeout(resolve, 600 + Math.random() * 100),
                 )
-                await dialog.dismiss()
+                try {
+                    await dialog.dismiss()
+                } catch (e) {
+                    console.error('Error dismissing dialog:', e)
+                }
             })
 
             // Get "#deprDtm" hidden input value
