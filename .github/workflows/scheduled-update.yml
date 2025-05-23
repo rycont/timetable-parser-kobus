@@ -129,11 +129,3 @@ jobs:
                   else
                     echo "No changes to commit in Bustago"
                   fi
-                  
-                  cd ..
-                  
-                  if git add -A && git commit -m "Regular Data Update(Workspace)" && git push origin || echo "No changes to commit in Workspace"; then
-                    echo "Successfully updated Workspace repository"
-                  else
-                    echo "No changes to commit in Workspace"
-                  fi
