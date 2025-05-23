@@ -50,6 +50,9 @@ jobs:
                   cd ../bustago-output
                   git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-bustago.git
 
+                  cd ../cache
+                  git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-cache.git
+
                   # 원래 디렉토리로 복귀
                   cd ..
 
@@ -63,6 +66,8 @@ jobs:
                   cd kobus-output
                   git switch main
                   cd ../bustago-output
+                  git switch main
+                  cd ../cache
                   git switch main
 
             - uses: browser-actions/setup-chrome@v1
@@ -101,7 +106,15 @@ jobs:
 
             - name: Push to GitHub
               run: |
-                  cd kobus-output
+                  cd cache
+
+                  if git add -A && git commit -m "Regular Data Update(Cache)" && git push origin; then
+                    echo "Successfully updated Cache repository"
+                  else
+                    echo "No changes to commit in Cache"
+                  fi
+
+                  cd ../kobus-output
 
                   if git add -A && git commit -m "Regular Data Update(Kobus)" && git push origin; then
                     echo "Successfully updated Kobus repository"
