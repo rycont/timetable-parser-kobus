@@ -4,3 +4,6 @@
 [submodule "bustago-output"]
 	path = bustago-output
 	url = https://github.com/rycont/operation-plan-bustago
+[submodule "cache"]
+	path = cache
+	url = https://github.com/rycont/timetable-parser-kobus-cache
