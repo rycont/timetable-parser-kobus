@@ -51,7 +51,7 @@ jobs:
                   git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-bustago.git
 
                   cd ../cache
-                  git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-cache.git
+                  git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/timetable-parser-kobus-cache.git
 
                   # 원래 디렉토리로 복귀
                   cd ..
