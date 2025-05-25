@@ -1,17 +1,32 @@
-import { getTerminals as getBustagoTerminals } from './bustago/get-terminals.ts'
-import { getRoutesFromTerminal as getBustagoRoutesFromTerminal } from './bustago/get-routes-from-terminal.ts'
-import { getPlansFromRoute as getBustagoPlansFromRoute } from './bustago/get-plans-from-route.ts'
+import { getTerminals as getBustagoTerminals } from "./bustago/get-terminals.ts";
+import { getRoutesFromTerminal as getBustagoRoutesFromTerminal } from "./bustago/get-routes-from-terminal.ts";
+import { getPlansFromRoute as getBustagoPlansFromRoute } from "./bustago/get-plans-from-route.ts";
+import { Route } from "./common/scheme/operation.ts";
 
-const SAMPLES = parseInt(Deno.env.get('UPDATE_SAMPLES') ?? '20', 10)
+const SAMPLES = parseInt(Deno.env.get("UPDATE_SAMPLES") ?? "20", 10);
 
-const terminals = [...(await getBustagoTerminals()).values()]
+const terminals = [...(await getBustagoTerminals()).values()];
+const routes: Route[] = [];
 
-for (let i = 0; i < SAMPLES; i++) {
-    const departingTerminal =
-        terminals[Math.floor(Math.random() * terminals.length)]
-    const { data: routes } = await getBustagoRoutesFromTerminal(
-        departingTerminal.id,
-    )
-    const arrivingTerminal = routes[Math.floor(Math.random() * routes.length)]
-    await getBustagoPlansFromRoute(departingTerminal.id, arrivingTerminal.id)
+for (const terminal of terminals) {
+  const { data } = await getBustagoRoutesFromTerminal(terminal.id);
+  for (const route of data) {
+    routes.push({
+      departureTerminalId: terminal.id,
+      arrivalTerminalId: route.id,
+      durationInMinutes: -1,
+    });
+  }
+}
+
+const sampledRoutes = routes.toSorted(() => 0.5 - Math.random()).slice(
+  0,
+  SAMPLES,
+);
+
+for (const route of sampledRoutes) {
+  await getBustagoPlansFromRoute(
+    route.departureTerminalId,
+    route.arrivalTerminalId,
+  );
 }
