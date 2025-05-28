@@ -11,6 +11,7 @@ export async function getTerminals() {
         method: 'POST',
     })
 
+    // console.log(rawTerminals.data)
     const terminals = rawAllTerminalsScheme.parse(JSON.parse(rawTerminals.data))
 
     if (!rawTerminals.cached) {

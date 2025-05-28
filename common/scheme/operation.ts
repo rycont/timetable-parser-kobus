@@ -7,6 +7,8 @@ export const routeScheme = z.object({
     durationInMinutes: z.number(),
 })
 
+export type Route = z.infer<typeof routeScheme>
+
 export const plannedOperationScheme = routeScheme.extend({
     operator: z.string(),
     departureTime: timeScheme,

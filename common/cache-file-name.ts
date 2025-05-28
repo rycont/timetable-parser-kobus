@@ -1,9 +1,9 @@
 import { CACHE_DIR } from '../const.ts'
 const today = new Date().toISOString().split('T')[0]
 
-export function createCacheFileName(
+export function createCacheFilePath(
     fileName: string,
-    useDatePrefix: boolean,
+    useDatePrefix = false,
 ): string {
     const cacheFilePath = useDatePrefix
         ? `${CACHE_DIR}/${today}-${fileName}`

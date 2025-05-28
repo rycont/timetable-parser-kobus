@@ -1,7 +1,4 @@
-import { CACHE_DIR } from '../const.ts'
-import { createCacheFileName } from './cache-file-name.ts'
-
-const cacheStore = new Map<string, string>()
+import { cacher } from './cacher.ts'
 
 export async function cachedFetch(
     filename: string,
@@ -12,27 +9,11 @@ export async function cachedFetch(
     cached: boolean
     data: string
 }> {
-    const cacheFilePath = createCacheFileName(filename, useDatePrefix)
-
-    try {
-        if (cacheStore.has(cacheFilePath)) {
-            return {
-                cached: false,
-                data: cacheStore.get(cacheFilePath) as string,
-            }
-        }
-
-        const cache = await Deno.readTextFile(cacheFilePath)
-
-        cacheStore.set(cacheFilePath, cache)
-
+    const cache = await cacher(filename, useDatePrefix)
+    if (cache.hit) {
         return {
             cached: true,
-            data: cache,
-        }
-    } catch (e) {
-        if (!(e instanceof Deno.errors.NotFound)) {
-            throw e
+            data: cache.data,
         }
     }
 
@@ -43,11 +24,7 @@ export async function cachedFetch(
     }
     const data = await response.text()
 
-    // Save the content to the cache.
-    await Deno.mkdir(CACHE_DIR, { recursive: true })
-    await Deno.writeTextFile(cacheFilePath, data)
-
-    cacheStore.set(cacheFilePath, data)
+    await cache.create(data, 1) // 1 day expiration
 
     await new Promise((resolve) => setTimeout(resolve, 700))
 

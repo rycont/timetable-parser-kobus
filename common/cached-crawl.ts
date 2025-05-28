@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer-core'
-import { createCacheFileName } from './cache-file-name.ts'
+import { createCacheFilePath } from './cache-file-name.ts'
 import { CACHE_DIR } from '../const.ts'
 
 const browser = await puppeteer.launch({
@@ -26,7 +26,7 @@ export async function cachedCrawl({
     fresh: boolean
     data: string[]
 }> {
-    const cacheFilePath = createCacheFileName(fileName, useDatePrefix)
+    const cacheFilePath = createCacheFilePath(fileName, useDatePrefix)
 
     try {
         if (cacheStore.has(cacheFilePath)) {
