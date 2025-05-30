@@ -19,7 +19,9 @@ for (const terminal of terminals) {
     }
 }
 
-const sampledRoutes = routes.slice(0, SAMPLES)
+const sampledRoutes = routes
+    .toSorted(() => Math.random() - 0.5)
+    .slice(0, SAMPLES)
 
 for (const route of sampledRoutes) {
     await getBustagoPlansFromRoute(
