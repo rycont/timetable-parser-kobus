@@ -47,6 +47,7 @@ export default async function getPlansFromRouteInSpecificDate(
                 body: requestBody,
             },
             false,
+            14,
         )
 
         const operations = rawOperationScheme.parse(

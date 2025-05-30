@@ -5,6 +5,7 @@ export async function cachedFetch(
     url: string,
     options?: RequestInit,
     useDatePrefix = true,
+    expiresIn = 1, // in days
 ): Promise<{
     cached: boolean
     data: string
@@ -24,7 +25,7 @@ export async function cachedFetch(
     }
     const data = await response.text()
 
-    await cache.create(data, 1) // 1 day expiration
+    await cache.create(data, expiresIn) // 1 day expiration
 
     await new Promise((resolve) => setTimeout(resolve, 700))
 
