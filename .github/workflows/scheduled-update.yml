@@ -104,6 +104,10 @@ jobs:
                   CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
                   UPDATE_SAMPLES: ${{ github.event.inputs.Samples || 4 }}
 
+            - name: Remove Expired Caches
+              run: |
+                  deno run -A --unstable-temporal remove-old-caches.ts
+
             - name: Push to GitHub
               run: |
                   cd cache
