@@ -2,8 +2,8 @@ name: Scheduled Data Update
 
 on:
     schedule:
-        # 30분마다 실행
-        - cron: '*/30 * * * *'
+        # 매 시간 실행
+        - cron: '0 * * * *'
     # 수동으로 워크플로우를 실행할 수 있도록 추가
     workflow_dispatch:
         inputs:
@@ -12,7 +12,7 @@ on:
                 default: '4'
             RepetitionTime:
                 required: true
-                default: '20'
+                default: '50'
                 description: '실행 기간 (분)'
 
 jobs:
@@ -73,11 +73,11 @@ jobs:
             - uses: browser-actions/setup-chrome@v1
               id: setup-chrome
 
-            - name: Repeat update script for ${{ github.event.inputs.RepetitionTime || 20 }} minutes
+            - name: Repeat update script for ${{ github.event.inputs.RepetitionTime || 50 }} minutes
               run: |
                   run_for_min() {
                     local cmd="$1"
-                    local end=$((SECONDS + ${{ github.event.inputs.RepetitionTime || 20 }} * 60))
+                    local end=$((SECONDS + ${{ github.event.inputs.RepetitionTime || 50 }} * 60))
 
                     while [ $SECONDS -lt $end ]; do
                       $cmd || echo "Command failed, retrying..."
@@ -88,7 +88,7 @@ jobs:
                   update_kobus() {
                     run_for_min "deno run -A --unstable-temporal update-sample-kobus.ts"
                   }
-                  
+
                   update_bustago() {
                     run_for_min "deno run -A --unstable-temporal update-sample-bustago.ts"
                   }
