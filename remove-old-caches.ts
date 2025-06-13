@@ -10,6 +10,14 @@ export default async function removeOldCaches() {
         try {
             const parsedCache = cacheV2Scheme.safeParse(JSON.parse(content))
             if (parsedCache.success) {
+                const expires = new Date(parsedCache.data.expires)
+                const hasExpired = expires < new Date()
+
+                if (hasExpired) {
+                    const filePath = `${CACHE_DIR}/${file.name}`
+                    console.log(`Deleting expired cache file: ${filePath}`)
+                    await Deno.remove(filePath)
+                }
                 continue
             }
         } catch {}
