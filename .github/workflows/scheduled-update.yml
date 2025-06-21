@@ -49,10 +49,10 @@ jobs:
               run: |
                   git config --global url."https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
-                  cd kobus-output
-                  git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-kobus.git
+                  # cd kobus-output
+                  # git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-kobus.git
                     
-                  cd ../bustago-output
+                  cd bustago-output
                   git remote set-url origin https://${{ secrets.MY_GITHUB_TOKEN }}:x-oauth-basic@github.com/rycont/operation-plan-bustago.git
 
                   cd ../cache
@@ -68,9 +68,9 @@ jobs:
 
             - name: Switch submodules to main branch
               run: |
-                  cd kobus-output
-                  git switch main
-                  cd ../bustago-output
+                  # cd kobus-output
+                  # git switch main
+                  cd bustago-output
                   git switch main
                   cd ../cache
                   git switch main
@@ -98,7 +98,7 @@ jobs:
                     run_for_min "deno run -A --unstable-temporal update-sample-bustago.ts"
                   }
 
-                  update_kobus &
+                  # update_kobus &
                   update_bustago &
 
                   wait
@@ -115,7 +115,15 @@ jobs:
 
             - name: Push to GitHub
               run: |
-                  cd cache
+                  cd bustago-output
+
+                  if git add -A && git commit -m "Regular Data Update(Bustago)" && git push origin; then
+                    echo "Successfully updated Bustago repository"
+                  else
+                    echo "No changes to commit in Bustago"
+                  fi
+
+                  cd ../cache
 
                   if git add -A && git commit -m "Regular Data Update(Cache)" && git push origin; then
                     echo "Successfully updated Cache repository"
@@ -123,18 +131,10 @@ jobs:
                     echo "No changes to commit in Cache"
                   fi
 
-                  cd ../kobus-output
+                  # cd ../kobus-output
 
-                  if git add -A && git commit -m "Regular Data Update(Kobus)" && git push origin; then
-                    echo "Successfully updated Kobus repository"
-                  else
-                    echo "No changes to commit in Kobus"
-                  fi
-
-                  cd ../bustago-output
-
-                  if git add -A && git commit -m "Regular Data Update(Bustago)" && git push origin; then
-                    echo "Successfully updated Bustago repository"
-                  else
-                    echo "No changes to commit in Bustago"
-                  fi
+                  # if git add -A && git commit -m "Regular Data Update(Kobus)" && git push origin; then
+                  #   echo "Successfully updated Kobus repository"
+                  # else
+                  #   echo "No changes to commit in Kobus"
+                  # fi
