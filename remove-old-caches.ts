@@ -1,4 +1,4 @@
-import { cacheV2Scheme } from './common/cacher.ts'
+import { cacheV2Scheme } from './cache-functions/cacher.ts'
 
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}/
 const CACHE_DIR = Deno.env.get('CACHE_DIR') || './cache'

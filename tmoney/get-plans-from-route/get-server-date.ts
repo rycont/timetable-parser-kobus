@@ -1,5 +1,5 @@
 import { DOMParser } from '@b-fuze/deno-dom'
-import { cachedFetch } from '../../common/cached-fetch.ts'
+import { cachedFetch } from '../../cache-functions/cached-fetch.ts'
 
 const URI = 'https://intercitybus.tmoney.co.kr/runinf/runInf.do'
 

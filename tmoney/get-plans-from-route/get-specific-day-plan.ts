@@ -1,4 +1,4 @@
-import { cachedFetch } from '../../common/cached-fetch.ts'
+import { cachedFetch } from '../../cache-functions/cached-fetch.ts'
 import { formatLocalDate } from '../../common/format-local-date.ts'
 import { Terminal } from '../../common/scheme/terminal.ts'
 

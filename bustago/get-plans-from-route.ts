@@ -4,6 +4,7 @@ import {
     OperatingPattern,
     plannedOperationScheme,
 } from '../common/scheme/operation.ts'
+import { CannotFetchPastDateError } from '../error-signals/fetch-operation.ts'
 import getPlansFromRouteInSpecificDate from './get-plans-from-route-specific-date.ts'
 import { RawOperation } from './scheme/operation.ts'
 
@@ -21,61 +22,85 @@ export async function getPlansFromRoute(
         today.getDate(),
     )
 
+    date.setDate(date.getDate() + 7)
+
     const plansByPlanKey: Map<string, RawOperation[]> = new Map()
 
     const iterations = Array(PARSING_WINDOW_SIZE)
         .fill(0)
         .map((_, index) => index)
 
-    let isFresh = false
+    // let isFresh = false
+    let freshlyFetched = 0
+    let cachedHit = 0
+
     let operations = 0
 
-    const timeKey = `Bustago: ${departureTerminalId} -> ${arrivalTerminalId}`
+    const timeKey = `[Bustago] ${departureTerminalId} -> ${arrivalTerminalId}`
     console.time(timeKey)
 
-    for await (const index of iterations) {
-        date.setDate(date.getDate() + 1)
+    for (const index of iterations) {
+        date.setDate(date.getDate() - 1)
 
-        const plans = await getPlansFromRouteInSpecificDate(
-            departureTerminalId,
-            arrivalTerminalId,
-            date,
-        )
+        try {
+            const plans = await getPlansFromRouteInSpecificDate({
+                departureTerminalId,
+                arrivalTerminalId,
+                date,
+            })
 
-        operations += plans.data.length
+            operations += plans.data.length
 
-        if (plans.fresh) {
-            isFresh = true
-        }
-
-        if (index === 7 && plans.data.length === 0) {
-            break
-        }
-
-        for (const plan of plans.data) {
-            const planKey = plan.DEP_TIME + '@' + plan.BUS_ROUTE_ID
-
-            if (plansByPlanKey.has(planKey)) {
-                plansByPlanKey.get(planKey)!.push(plan)
+            if (plans.fresh) {
+                freshlyFetched++
             } else {
-                plansByPlanKey.set(planKey, [plan])
+                cachedHit++
             }
+
+            if (index === PARSING_WINDOW_SIZE - 8 && plans.data.length === 0) {
+                console.log(
+                    `[Bustago] No plans found between ${departureTerminalId} <> ${arrivalTerminalId}`,
+                )
+                break
+            }
+
+            for (const plan of plans.data) {
+                const planKey = plan.DEP_TIME + '@' + plan.BUS_ROUTE_ID
+
+                if (plansByPlanKey.has(planKey)) {
+                    plansByPlanKey.get(planKey)!.push(plan)
+                } else {
+                    plansByPlanKey.set(planKey, [plan])
+                }
+            }
+        } catch (error) {
+            if (error instanceof CannotFetchPastDateError) {
+                console.log(
+                    `[Bustago] Cannot fetch past date: ${date
+                        .toISOString()
+                        .slice(0, 10)}`,
+                )
+                continue
+            }
+
+            throw error
         }
     }
 
     const mergedPlans = [...plansByPlanKey.values()].map((plans) =>
         mergeBustagoPlans(plans),
     )
+    console.log(`[Bustago] ${cachedHit} Cached, ${freshlyFetched} Fresh`)
 
-    if (isFresh) {
-        console.timeEnd(timeKey)
-
+    if (freshlyFetched > 0) {
         await saveData(
             'bustago',
             `timetable/${departureTerminalId}-${arrivalTerminalId}`,
             JSON.stringify(mergedPlans, null, 2),
         )
     }
+
+    console.timeEnd(timeKey)
 
     return mergedPlans
 }
@@ -243,4 +268,28 @@ function determineVariantBustago(plans: RawOperation[]): OperatingPattern {
     //     type: 'specific-day',
     //     days: onceDays,
     // }
+}
+
+if (import.meta.main) {
+    const departureTerminalId =
+        prompt('Enter departure terminal ID: ') || '0001'
+    const arrivalTerminalId = prompt('Enter arrival terminal ID: ') || '1001'
+
+    const plans = await getPlansFromRoute(
+        departureTerminalId,
+        arrivalTerminalId,
+    )
+
+    console.log(`Plans from ${departureTerminalId} to ${arrivalTerminalId}:`)
+
+    console.table(plans, [
+        'routeId',
+        'date',
+        'departureTime',
+        'fare',
+        'busType',
+        'operator',
+        'durationInMinutes',
+        'stops',
+    ])
 }

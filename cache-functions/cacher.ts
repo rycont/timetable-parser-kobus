@@ -55,7 +55,12 @@ export async function cacher(fileName: string, useDatePrefix: boolean) {
             data: fileText,
         }
     } catch (e) {
-        console.error(e)
+        if (e instanceof Deno.errors.NotFound) {
+            // console.log(`[Cacher] Cache miss for ${fileName}`)
+        } else {
+            console.error(e)
+        }
+
         const canTryCacheV1 = e instanceof Deno.errors.NotFound && useDatePrefix
         if (canTryCacheV1) {
             return tryCacheV1(fileName)

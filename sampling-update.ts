@@ -1,4 +1,4 @@
-import { closeBrowser } from './common/cached-crawl.ts'
+import { closeBrowser } from './cache-functions/cached-crawl.ts'
 
 import { getRoutePlans as getKobusRoutePlans } from './kobus/get-route-plans/index.ts'
 import { getTerminals as getKobusTerminals } from './kobus/get-terminals.ts'

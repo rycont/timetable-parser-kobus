@@ -1,4 +1,4 @@
-import { cachedFetch } from '../common/cached-fetch.ts'
+import { cachedFetch } from '../cache-functions/cached-fetch.ts'
 import saveData from '../common/save-data.ts'
 import { Terminal } from '../common/scheme/terminal.ts'
 import { rawAllTerminalsScheme } from './scheme/terminal.ts'

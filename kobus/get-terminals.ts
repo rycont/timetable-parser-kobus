@@ -1,4 +1,4 @@
-import { cachedCrawl } from '../common/cached-crawl.ts'
+import { cachedCrawl } from '../cache-functions/cached-crawl.ts'
 import saveData from '../common/save-data.ts'
 import { Terminal } from '../common/scheme/terminal.ts'
 import { rawRouteResponseScheme } from './types/terminal-raw.ts'
