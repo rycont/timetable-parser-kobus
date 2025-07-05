@@ -22,7 +22,7 @@ export async function getPlansFromRoute(
         today.getDate(),
     )
 
-    date.setDate(date.getDate() + 7)
+    date.setDate(date.getDate() + 3)
 
     const plansByPlanKey: Map<string, RawOperation[]> = new Map()
 
